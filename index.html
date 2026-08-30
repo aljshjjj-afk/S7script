@@ -1,83 +1,380 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMNEX :: صيانة</title>
+    <title>S7 Scripte :: Neon Hub</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            overflow: hidden;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #05020a; color: #c9d1d9; font-size: 14px; }
+
+        header { 
+            background-color: #0c0618; border-bottom: 1px solid #2e1065; 
+            padding: 12px 20px; display: flex; justify-content: space-between; 
+            align-items: center; position: sticky; top: 0; z-index: 100; 
         }
-        .story-container {
-            width: 360px; 
-            height: 85vh; 
-            background: #0a0a0a;
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(18, 255, 255, 0.4);
-            border: 2px solid #12ffff;
+        .logo { font-size: 20px; font-weight: 800; color: #fff; text-shadow: 0 0 10px #a855f7; cursor: pointer; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+
+        .btn-neon {
+            background: #a855f7; color: #fff; border: none; padding: 8px 16px;
+            border-radius: 6px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); transition: 0.3s; font-size: 13px;
+        }
+        .btn-neon:hover { background: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.8); }
+
+        .menu-btn { background: none; border: none; color: #c084fc; font-size: 22px; cursor: pointer; padding: 4px; }
+
+        .sidebar {
+            position: fixed; top: 0; right: -260px; width: 250px; height: 100%;
+            background: #0c0618; border-left: 1px solid #3b0764;
+            box-shadow: -5px 0 20px rgba(168, 85, 247, 0.2); z-index: 200;
+            transition: 0.3s ease; padding: 20px;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-close { background: none; border: none; color: #a855f7; font-size: 20px; float: left; cursor: pointer; }
+        .sidebar-links { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; }
+        .sidebar-links a { color: #e2d9f3; text-decoration: none; font-size: 15px; font-weight: 600; padding: 10px; border-radius: 8px; }
+        .sidebar-links a:hover { background: #1e0938; color: #c084fc; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: none; z-index: 150; }
+        .overlay.active { display: block; }
+
+        .container { max-width: 900px; margin: 25px auto; padding: 0 15px; }
+
+        .search-container {
+            max-width: 650px; margin: 0 auto 25px auto; display: flex; gap: 5px;
+            background: #0d051a; border: 1px solid #3b0764; border-radius: 8px; padding: 4px;
+        }
+        .search-container input { flex: 1; background: transparent; border: none; padding: 10px 15px; color: #fff; outline: none; }
+
+        .section-header { margin-bottom: 15px; }
+        .section-header h2 { color: #fff; font-size: 20px; }
+
+        .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .script-card { background: #0c0618; border: 1px solid #2e1065; border-radius: 10px; overflow: hidden; transition: 0.3s; cursor: pointer; }
+        .script-card:hover { border-color: #a855f7; transform: translateY(-3px); }
+        .script-img { width: 100%; height: 140px; background-size: cover; background-position: center; position: relative; }
+        .badge { position: absolute; bottom: 10px; left: 10px; background: #a855f7; color: #fff; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 4px; }
+        .script-body { padding: 12px; }
+        .script-title { font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px; }
+
+        .detail-page { display: none; }
+        .detail-card { background: #0d051a; border: 1px solid #2e1065; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .detail-header { display: flex; gap: 20px; flex-wrap: wrap; }
+        .detail-img { width: 320px; height: 180px; border-radius: 8px; background-size: cover; background-position: center; border: 1px solid #3b0764; }
+        .detail-info { flex: 1; min-width: 250px; }
+        .detail-title { font-size: 24px; color: #fff; margin-bottom: 5px; }
+        .detail-meta { color: #94a3b8; font-size: 13px; margin-bottom: 15px; }
+        
+        .btn-action { background: #1e0938; color: #c084fc; border: 1px solid #3b0764; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+        .code-container { background: #05020a; border: 1px solid #2e1065; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .code-box { font-family: monospace; color: #a855f7; font-size: 12px; word-break: break-all; white-space: pre-wrap; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
+        .form-control { width: 100%; background: #05020a; border: 1px solid #2e1065; border-radius: 6px; padding: 12px; color: #fff; outline: none; font-size: 13px; }
+        textarea.form-control { resize: vertical; min-height: 100px; }
+        .radio-group { display: flex; gap: 20px; margin-top: 8px; }
+        .radio-label { display: flex; align-items: center; gap: 8px; color: #c9d1d9; cursor: pointer; }
+
+        /* Custom File Upload Box */
+        .file-upload-wrapper {
+            border: 2px dashed #2e1065;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            background: #05020a;
+            cursor: pointer;
+            transition: 0.3s;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
-        h1 {
-            font-size: 3rem;
-            color: #fff;
-            text-shadow: 0 0 10px #fff, 0 0 20px #12ffff, 0 0 40px #12ffff;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-        }
-        .status {
-            font-size: 1.3rem;
-            color: #ff0055;
-            text-shadow: 0 0 12px #ff0055;
-            letter-spacing: 3px;
-        }
-        .loader {
-            width: 180px;
-            height: 4px;
-            background: rgba(255,0,85,0.2);
-            margin-top: 15px;
-            position: relative;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .loader::after {
-            content: '';
+        .file-upload-wrapper:hover { border-color: #a855f7; }
+        .file-upload-input {
             position: absolute;
-            left: 0; top: 0; height: 100%; width: 50%;
-            background: #ff0055;
-            box-shadow: 0 0 10px #ff0055;
-            animation: moveLoader 1.5s infinite linear;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; cursor: pointer;
         }
-        @keyframes moveLoader {
-            0% { left: -50%; }
-            100% { left: 100%; }
+        .upload-preview {
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 6px;
+            display: none;
         }
-        .footer-text {
-            position: absolute;
-            bottom: 25px;
-            font-size: 0.75rem;
-            color: #444;
-            letter-spacing: 1px;
-        }
+
+        footer { text-align: center; padding: 20px; color: #64748b; border-top: 1px solid #2e1065; margin-top: 40px; font-size: 12px; }
+        footer b { color: #c084fc; }
     </style>
 </head>
 <body>
-    <div class="story-container">
-        <h1>OMNEX</h1>
-        <div class="status">تحت الصيانة</div>
-        <div class="loader"></div>
-        <div class="footer-text">®: نوبيدو s7 </div>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="toggleMenu()">✕</button>
+        <div class="sidebar-links">
+            <a href="javascript:void(0)" onclick="showHome(); toggleMenu();">Home</a>
+            <a href="javascript:void(0)" onclick="showUpload(); toggleMenu();">Upload Script</a>
+            <a href="https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/database.json" target="_blank">Discord Bot API</a>
+        </div>
     </div>
+
+    <header>
+        <div class="logo" onclick="showHome()">S7 Scripte</div>
+        <div class="header-actions">
+            <button class="btn-neon" onclick="showUpload()">Upload</button>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="homePage">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Try 'blox fruits' or 'auto farm'..." onkeyup="searchScripts()">
+                <button class="btn-neon" onclick="searchScripts()">Search</button>
+            </div>
+
+            <div class="section-header">
+                <h2>Recent Scripts</h2>
+            </div>
+
+            <div class="script-grid" id="scriptGrid"></div>
+        </div>
+
+        <!-- DETAIL PAGE -->
+        <div id="detailPage" class="detail-page">
+            <button class="btn-action" onclick="showHome()" style="margin-bottom: 15px;">← Back to Home</button>
+            
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div class="detail-img" id="detailImg"></div>
+                    <div class="detail-info">
+                        <h1 class="detail-title" id="detailTitle">Script Title</h1>
+                        <div class="detail-meta" id="detailMeta">Uploaded by User</div>
+                        
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-neon" onclick="copyScriptCode()">Copy Script</button>
+                            <button class="btn-action" id="keyBadge">Keyless</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <h3 style="color:#fff; margin-bottom: 10px;">Features</h3>
+                <p style="color:#94a3b8; font-size: 13px;" id="detailDesc">No description provided.</p>
+            </div>
+
+            <div class="detail-card">
+                <h3 style="color:#fff; margin-bottom: 10px;">Raw Script</h3>
+                <div class="code-container">
+                    <div class="code-box" id="detailCode">-- Script code goes here</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPLOAD PAGE WITH GALLERY IMAGE INPUT -->
+        <div id="uploadPage" class="detail-page">
+            <button class="btn-action" onclick="showHome()" style="margin-bottom: 15px;">← Back to Home</button>
+            
+            <div class="detail-card">
+                <h2 style="color:#fff; text-align: center; margin-bottom: 25px;">Upload Script</h2>
+                
+                <form id="uploadForm" onsubmit="handleUpload(event)">
+                    <div class="form-group">
+                        <label>Script Title</label>
+                        <input type="text" id="upTitle" class="form-control" placeholder="Enter title of the script" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Game ID</label>
+                        <input type="text" id="upGameId" class="form-control" placeholder="Enter the game ID">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Custom Thumbnail (from Gallery)</label>
+                        <div class="file-upload-wrapper">
+                            <span id="uploadLabelText" style="color: #c084fc; font-weight: bold;">Choose Image from Gallery</span>
+                            <input type="file" id="upImageFile" class="file-upload-input" accept="image/*" onchange="previewImage(event)">
+                            <br>
+                            <img id="imagePreview" class="upload-preview" alt="Preview">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Is it a hub or a universal script?</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="scriptType" value="Hub" checked> Hub</label>
+                            <label class="radio-label"><input type="radio" name="scriptType" value="Universal"> Universal Script</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="radio-label"><input type="checkbox" id="upKeySystem"> Key system</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Features</label>
+                        <textarea id="upFeatures" class="form-control" placeholder="Describe script features..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Script</label>
+                        <textarea id="upCode" class="form-control" style="min-height: 120px; font-family: monospace;" placeholder="Place your script here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-neon" style="width: 100%; padding: 12px; font-size: 15px;">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Developed by <b>S7 Scripte</b> | All Rights Reserved to <b>S7 nobido</b>
+    </footer>
+
+    <script>
+        let allScripts = [];
+        let currentScriptCode = "";
+        let uploadedImageBase64 = "";
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function showHome() {
+            document.getElementById('homePage').style.display = 'block';
+            document.getElementById('detailPage').style.display = 'none';
+            document.getElementById('uploadPage').style.display = 'none';
+        }
+
+        function showUpload() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('detailPage').style.display = 'none';
+            document.getElementById('uploadPage').style.display = 'block';
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageBase64 = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = uploadedImageBase64;
+                    preview.style.display = 'inline-block';
+                    document.getElementById('uploadLabelText').innerText = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function fetchDatabase() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/database.json');
+                const data = await res.json();
+                const remoteScripts = data.scripts || [];
+                const localScripts = JSON.parse(localStorage.getItem('local_user_scripts') || '[]');
+                allScripts = [...localScripts, ...remoteScripts];
+                renderScripts(allScripts);
+            } catch (err) {
+                const localScripts = JSON.parse(localStorage.getItem('local_user_scripts') || '[]');
+                allScripts = localScripts;
+                renderScripts(allScripts);
+            }
+        }
+
+        function renderScripts(scripts) {
+            const grid = document.getElementById('scriptGrid');
+            grid.innerHTML = '';
+
+            if (!scripts || scripts.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#a855f7;">No scripts found. Upload one!</div>';
+                return;
+            }
+
+            scripts.forEach((s, index) => {
+                const thumb = s.thumbnail || 'https://via.placeholder.com/300x150/1e0938/a855f7?text=S7+Scripte';
+                grid.innerHTML += `
+                    <div class="script-card" onclick="openScriptDetails(${index})">
+                        <div class="script-img" style="background-image: url('${thumb}');">
+                            <span class="badge">${s.key_system ? 'Key System' : 'Keyless'}</span>
+                        </div>
+                        <div class="script-body">
+                            <div class="script-title">${s.title}</div>
+                            <p style="font-size: 11px; color: #64748b;">Game ID: ${s.game_id || 'Universal'}</p>
+                            <p style="font-size: 10px; color: #a855f7; margin-top: 8px;">Owner: ${s.owner || 'Community User'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function handleUpload(e) {
+            e.preventDefault();
+            
+            const newScript = {
+                title: document.getElementById('upTitle').value,
+                game_id: document.getElementById('upGameId').value || 'Universal',
+                thumbnail: uploadedImageBase64 || 'https://via.placeholder.com/300x150/1e0938/a855f7?text=S7+Scripte',
+                key_system: document.getElementById('upKeySystem').checked,
+                features: document.getElementById('upFeatures').value,
+                script_code: document.getElementById('upCode').value,
+                owner: 'Community User'
+            };
+
+            const localScripts = JSON.parse(localStorage.getItem('local_user_scripts') || '[]');
+            localScripts.unshift(newScript);
+            localStorage.setItem('local_user_scripts', JSON.stringify(localScripts));
+
+            document.getElementById('uploadForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('uploadLabelText').innerText = 'Choose Image from Gallery';
+            uploadedImageBase64 = "";
+
+            alert('Script Uploaded Successfully!');
+            fetchDatabase();
+            showHome();
+        }
+
+        function openScriptDetails(index) {
+            const s = allScripts[index];
+            if (!s) return;
+
+            document.getElementById('detailTitle').innerText = s.title;
+            document.getElementById('detailMeta').innerText = `Game ID: ${s.game_id || 'Universal'} | Uploaded by ${s.owner || 'User'}`;
+            document.getElementById('detailImg').style.backgroundImage = `url('${s.thumbnail || ''}')`;
+            document.getElementById('keyBadge').innerText = s.key_system ? 'Key System' : 'Keyless';
+            document.getElementById('detailDesc').innerText = s.features || 'No features described.';
+            document.getElementById('detailCode').innerText = s.script_code || '';
+            currentScriptCode = s.script_code || '';
+
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('uploadPage').style.display = 'none';
+            document.getElementById('detailPage').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function copyScriptCode() {
+            if (!currentScriptCode) return;
+            navigator.clipboard.writeText(currentScriptCode);
+            alert("Script code copied to clipboard!");
+        }
+
+        function searchScripts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allScripts.filter(s => 
+                s.title.toLowerCase().includes(query) || 
+                (s.features && s.features.toLowerCase().includes(query))
+            );
+            renderScripts(filtered);
+        }
+
+        fetchDatabase();
+    </script>
 </body>
-</html>
+    </html>
+    
