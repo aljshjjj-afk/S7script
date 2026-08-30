@@ -1,32 +1,24 @@
 {
-  "status": "success",
-  "developer": "S7 Scripte",
-  "rights": "S7 nobido",
   "scripts": [
     {
-      "id": 1,
-      "title": "S7 Auto Farm & Kill Aura",
-      "game_id": "2753915549",
-      "thumbnail": "https://via.placeholder.com/300x150/1e293b/facc15?text=S7+HUB",
-      "is_hub": true,
-      "key_system": true,
-      "features": "Auto Farm, Auto Kill, Teleport",
-      "tags": "blox fruits, farm, hub",
-      "script_code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/script.lua'))()",
+      "title": "S7 Hitbox Expander",
+      "game_id": "Universal",
+      "thumbnail": "https://via.placeholder.com/300x150/1e0938/a855f7?text=Hitbox+Expander",
+      "key_system": false,
+      "features": "Expands hitboxes for all target models in any supported game.",
+      "tags": "hitbox, universal, s7",
+      "script_code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/hitbox.lua'))()",
       "owner": "S7 nobido"
     },
     {
-      "id": 2,
-      "title": "S7 Hitbox Expander",
-      "game_id": "Universal",
-      "thumbnail": "https://via.placeholder.com/300x150/1e293b/6366f1?text=S7+NOBIDO",
-      "is_hub": false,
-      "key_system": false,
-      "features": "Big Hitbox, Silent Aim",
-      "tags": "universal, pvp, hitbox",
-      "script_code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/hitbox.lua'))()",
-      "owner": "S7 nobido"
+      "title": "Blox Fruits Auto Farm",
+      "game_id": "2753915549",
+      "thumbnail": "https://via.placeholder.com/300x150/1e0938/a855f7?text=Blox+Fruits",
+      "key_system": true,
+      "features": "Auto Farm Level, Auto Chest, and Fast Attack.",
+      "tags": "blox fruits, autofarm, level",
+      "script_code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/aljshjjj-afk/S7script/main/bloxfruits.lua'))()",
+      "owner": "Community User"
     }
   ]
 }
-
