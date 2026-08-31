@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7 SCRIPT</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-deep: #030007;
+            --bg-card: rgba(14, 6, 26, 0.85);
+            --neon-primary: #a855f7;
+            --neon-glow: rgba(168, 85, 247, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(126, 34, 206, 0.2) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(88, 28, 135, 0.2) 0%, transparent 45%),
+                linear-gradient(135deg, #030007 0%, #0a0118 100%);
+            background-attachment: fixed;
+        }
+
+        .welcome-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #030007; z-index: 9999; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s ease;
+        }
+        .welcome-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { 
+            font-size: 38px; font-weight: 900; color: #fff; 
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px var(--neon-primary), 0 0 60px rgba(168, 85, 247, 0.6); 
+            text-align: center;
+        }
+
+        header { 
+            background: rgba(10, 4, 20, 0.92); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color); 
+            padding: 12px 25px; display: flex; justify-content: space-between; 
+            align-items: center; position: sticky; top: 0; z-index: 100; 
+        }
+        .logo { 
+            font-size: 22px; font-weight: 900; color: #fff; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--neon-primary); cursor: pointer; 
+            display: flex; align-items: center; gap: 8px; 
+        }
+
+        .top-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(14, 6, 26, 0.9);
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            border-radius: 14px;
+        }
+        .tool-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #d8b4fe;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .tool-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .tool-btn:hover { background: rgba(168, 85, 247, 0.15); border-color: var(--border-color); color: #fff; }
+
+        .toolbar-divider { width: 1px; height: 24px; background: var(--border-color); margin: 0 4px; }
+
+        .user-avatar-badge {
+            width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+            border: 1px solid var(--border-color); cursor: pointer; transition: 0.3s;
+        }
+        .user-avatar-badge:hover { border-color: var(--neon-primary); box-shadow: 0 0 10px var(--neon-glow); }
+
+        .btn-cyber {
+            background: linear-gradient(135deg, #7e22ce, #a855f7); color: #fff; border: none; padding: 10px 18px;
+            border-radius: 12px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 0 15px var(--neon-glow); transition: all 0.3s ease; font-size: 13px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-cyber:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--neon-primary); filter: brightness(1.1); }
+
+        .btn-cyber-alt { 
+            background: rgba(25, 10, 45, 0.9); color: #d8b4fe; border: 1px solid var(--border-color); 
+            padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 13px; 
+            transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-cyber-alt:hover { border-color: var(--neon-primary); color: #fff; background: rgba(59, 7, 100, 0.6); }
+
+        .sidebar {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
+            background: rgba(10, 4, 20, 0.96); backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color); z-index: 200;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-close { background: none; border: none; color: var(--neon-primary); font-size: 22px; cursor: pointer; align-self: flex-start; }
+        .sidebar-links { margin-top: 25px; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-links a, .sidebar-links button { 
+            color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; 
+            padding: 12px 14px; border-radius: 12px; cursor: pointer; background: transparent; border: none; text-align: left;
+            transition: 0.2s; display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-links a:hover, .sidebar-links button:hover { background: rgba(168, 85, 247, 0.15); color: #fff; transform: translateX(4px); }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); display: none; z-index: 150; }
+        .overlay.active { display: block; }
+
+        .login-modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            background: var(--bg-card); backdrop-filter: blur(25px); border: 1px solid var(--border-color); border-radius: 18px;
+            padding: 35px; width: 90%; max-width: 420px; text-align: center;
+            z-index: 300; display: none; box-shadow: 0 0 50px rgba(168, 85, 247, 0.35);
+        }
+        .login-modal h2 { color: #fff; margin-bottom: 8px; font-size: 22px; }
+        .login-modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 25px; }
+        
+        .login-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .login-card-option {
+            background: rgba(5, 2, 10, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .login-card-option:hover {
+            border-color: var(--neon-primary);
+            background: rgba(40, 10, 70, 0.8);
+            transform: translateY(-3px);
+        }
+        .login-card-option img { width: 45px; height: 45px; object-fit: contain; }
+        .login-card-option span { color: #fff; font-size: 13px; font-weight: bold; }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .search-area-wrapper { max-width: 750px; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 12px; }
+        .search-container { display: flex; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 6px; }
+        .search-container input { flex: 1; background: transparent; border: none; padding: 12px 16px; color: #fff; outline: none; font-size: 14px; }
+        .upload-row-right { display: flex; justify-content: flex-end; width: 100%; }
+
+        .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .script-card { 
+            background: var(--bg-card); border: 1px solid var(--border-color); 
+            border-radius: 16px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; position: relative;
+        }
+        .script-card:hover { border-color: var(--neon-primary); transform: translateY(-4px); }
+        .script-img { width: 100%; height: 160px; background-size: cover; background-position: center; position: relative; }
+        .stats-badge { position: absolute; top: 12px; right: 12px; background: rgba(5,2,10,0.85); color: #d8b4fe; font-size: 11px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .private-badge { position: absolute; top: 12px; left: 12px; background: rgba(239, 68, 68, 0.85); color: #fff; font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: bold; }
+        
+        .script-body { padding: 16px; }
+        .script-title { font-weight: bold; color: #fff; font-size: 16px; margin-bottom: 6px; }
+        .script-owner { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        
+        .badge-owner { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; font-size: 10px; padding: 2px 7px; border-radius: 12px; font-weight: 900; }
+        .badge-admin { background: linear-gradient(135deg, #ec4899, #be185d); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 12px; font-weight: 900; }
+        
+        /* Verified Image Badge styling */
+        .badge-verified-img {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            vertical-align: middle;
+            display: inline-block;
+            margin-left: 2px;
+        }
+
+        .detail-page { display: none; }
+        .detail-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 25px; margin-bottom: 20px; }
+        .detail-header { display: flex; gap: 25px; flex-wrap: wrap; }
+        .detail-img { width: 100%; max-width: 340px; height: 200px; border-radius: 12px; background-size: cover; background-position: center; border: 1px solid var(--border-color); }
+        
+        .code-container { background: var(--bg-deep); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .code-box { font-family: monospace; color: #d8b4fe; font-size: 13px; word-break: break-all; white-space: pre-wrap; max-height: 250px; overflow-y: auto; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
+        .form-control, .form-select { width: 100%; background: rgba(5, 2, 10, 0.85); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; color: #fff; outline: none; font-size: 14px; }
+        
+        .comments-section { margin-top: 25px; }
+        .comment-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; }
+        .comment-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
+        .comment-content { flex: 1; }
+        .comment-author { font-weight: bold; font-size: 14px; color: #fff; display: flex; align-items: center; gap: 4px; }
+        .comment-text { font-size: 13px; color: var(--text-muted); margin-top: 4px; word-break: break-word; }
+        .comment-divider { border: 0; height: 1px; background: var(--border-color); margin: 8px 0; }
+
+        footer { text-align: center; padding: 25px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 50px; font-size: 13px; background: rgba(3, 0, 7, 0.6); }
+        footer a { color: #d8b4fe; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-loader" id="welcomeLoader">
+        <div class="loader-logo">WELCOME TO S7 SCRIPT</div>
+        <p style="color: var(--text-muted); margin-top: 12px; font-size: 13px; letter-spacing: 1px;">SECURE SCRIPT HUB ENVIRONMENT</p>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <div class="login-modal" id="loginModal" style="display: block;">
+        <h2>Authentication Required</h2>
+        <p>Please choose your login method to continue</p>
+        <div class="login-options-grid">
+            <div class="login-card-option" onclick="loginWithProvider('github')">
+                <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub">
+                <span>GitHub Login</span>
+            </div>
+            <div class="login-card-option" onclick="loginAsGuest()">
+                <img src="https://api.iconify.design/lucide:user-round.svg?color=%23a855f7" alt="Guest" style="filter: invert(1);">
+                <span>Guest Access</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div>
+            <button class="sidebar-close" onclick="closeSidebar()">X</button>
+            <div class="sidebar-links">
+                <a onclick="showHome(); closeSidebar();">Home</a>
+                <a onclick="showUpload(); closeSidebar();">Upload</a>
+                <a onclick="showProfile(); closeSidebar();">Profile</a>
+                <a href="https://discord.gg/mDZt6YeJdc" target="_blank">Discord Server</a>
+            </div>
+        </div>
+        <div>
+            <div id="sidebarAuthBtnContainer"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo" onclick="showHome()">S7 SCRIPT</div>
+        
+        <div class="top-toolbar">
+            <button class="tool-btn" onclick="showHome()" title="Home">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div class="toolbar-divider"></div>
+            <button class="tool-btn" onclick="showUpload()" title="Upload">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div class="toolbar-divider"></div>
+            <button class="tool-btn" onclick="showProfile()" title="Profile">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+            <div class="toolbar-divider"></div>
+            <button class="tool-btn" onclick="openSidebar()" title="Menu">
+                <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <div class="toolbar-divider"></div>
+            <img src="https://via.placeholder.com/40" id="headerUserAvatar" class="user-avatar-badge" onclick="showProfile()" alt="Profile">
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="homePage">
+            <div class="search-area-wrapper">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search community scripts..." onkeyup="searchScripts()">
+                    <button class="btn-cyber" onclick="searchScripts()">Search</button>
+                </div>
+                <div class="upload-row-right">
+                    <button class="btn-cyber" onclick="showUpload()">Upload</button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="color: #fff; font-size: 20px;">Community Scripts Hub</h2>
+                <span style="font-size: 12px; color: var(--text-muted);" id="scriptsCount">Loading...</span>
+            </div>
+            <div class="script-grid" id="scriptGrid"></div>
+        </div>
+
+        <div id="profilePage" class="detail-page">
+            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
+            <div class="detail-card">
+                <h2 style="color: #fff;" id="profileTitle">Guest Profile</h2>
+                <p style="color: var(--text-muted); margin-top: 5px;" id="profileSubText">You are browsing as Guest.</p>
+                
+                <div id="guestLoginPromptContainer" style="margin-top: 15px;">
+                    <button class="btn-cyber" onclick="openLoginModalFromProfile()">Login with GitHub</button>
+                </div>
+
+                <div id="ownerControlPanel" style="margin-top: 20px; display:none; padding: 20px; background: rgba(251,191,36,0.08); border: 1px solid #fbbf24; border-radius: 12px; text-align: center;">
+                    <h4 style="color: #fbbf24; margin-bottom: 15px;">Owner Control Panel</h4>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        <input type="text" id="broadcastInput" class="form-control" placeholder="Enter broadcast message here..." style="max-width: 380px; text-align: center;">
+                        <button class="btn-cyber" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="sendSecureBroadcast()">Send Broadcast</button>
+                    </div>
+                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
+
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px;">
+                        <input type="text" id="targetVerifiedInput" class="form-control" placeholder="Username to verify" style="max-width: 320px; text-align: center;">
+                        <button class="btn-cyber" style="background: linear-gradient(135deg, #0284c7, #38bdf8);" onclick="toggleVerifiedRole()">Toggle Verification</button>
+                    </div>
+                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
+                    
+                    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <input type="text" id="targetAdminInput" class="form-control" placeholder="Username to make Admin" style="max-width: 280px; text-align: center;">
+                        <button class="btn-cyber" onclick="toggleAdminRole()">Toggle Star Admin</button>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <input type="text" id="targetIpInput" class="form-control" placeholder="Enter IP address to ban" style="max-width: 280px; text-align: center;">
+                        <button class="btn-cyber" style="background: linear-gradient(135deg, #dc2626, #ef4444);" onclick="banIpAddress()">Ban IP</button>
+                    </div>
+                </div>
+            </div>
+            <div class="script-grid" id="userScriptGrid"></div>
+        </div>
+
+        <div id="detailPage" class="detail-page">
+            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div class="detail-img" id="detailImg"></div>
+                    <div style="flex:1;">
+                        <h1 id="detailTitle" style="color: #fff; font-size: 24px;"></h1>
+                        <div id="detailMeta" style="color: var(--text-muted); font-size: 13px; margin: 10px 0;"></div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                            <button class="btn-cyber" onclick="copyScriptCode()">Copy Code</button>
+                            <button class="btn-cyber-alt" id="rateBtn" onclick="toggleRating()">Rate (+1 Star)</button>
+                            <div id="ownerActions" style="display:none; gap: 10px;">
+                                <button class="btn-cyber-alt" onclick="openEditMode()" style="border-color: #fbbf24; color: #fbbf24;">Edit</button>
+                                <button class="btn-cyber-alt" onclick="deleteCurrentScript()" style="border-color: #ef4444; color: #ef4444;">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-card">
+                <h3 style="color:#fff; margin-bottom: 10px;">Features</h3>
+                <p style="color:var(--text-muted); line-height: 1.6;" id="detailDesc"></p>
+            </div>
+            <div class="detail-card">
+                <h3 style="color:#fff; margin-bottom: 10px;">Script Code</h3>
+                <div class="code-container"><div class="code-box" id="detailCode"></div></div>
+            </div>
+
+            <div class="detail-card comments-section">
+                <h3 style="color:#fff; margin-bottom: 15px;">Comments</h3>
+                <div id="commentsList"></div>
+                
+                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                    <textarea id="commentInputText" class="form-control" rows="2" placeholder="Write your comment here..."></textarea>
+                    <button class="btn-cyber" onclick="postComment()" style="align-self: flex-end;">Post Comment</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="uploadPage" class="detail-page">
+            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
+            <div class="detail-card">
+                <h2 style="color:#fff; text-align: center; margin-bottom: 20px;" id="uploadFormTitle">Upload New Script</h2>
+                <form onsubmit="handleUploadSubmit(event)">
+                    <input type="hidden" id="editScriptId">
+                    <div class="form-group"><label>Script Title</label><input type="text" id="upTitle" class="form-control" required></div>
+                    <div class="form-group"><label>Game ID</label><input type="text" id="upGameId" class="form-control" placeholder="Universal or Game ID"></div>
+                    <div class="form-group">
+                        <label>Thumbnail Image</label>
+                        <input type="file" id="upImageFile" class="form-control" accept="image/*" onchange="convertImageToBase64(event)">
+                        <input type="hidden" id="upImageUrl">
+                        <div id="imgPreviewContainer" style="margin-top: 8px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Visibility Status</label>
+                        <select id="upVisibility" class="form-select">
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Features Description</label><textarea id="upFeatures" class="form-control" rows="3" required></textarea></div>
+                    <div class="form-group"><label>Script Code</label><textarea id="upCode" class="form-control" rows="6" style="font-family: monospace;" required></textarea></div>
+                    <button type="submit" class="btn-cyber" style="width: 100%; padding: 13px;" id="uploadSubmitBtn">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Developed by <b>S7 SCRIPT</b>
+    </footer>
+
+    <script>
+        const SUPABASE_URL = 'https://omikpwffrqlxsyibsqgm.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_LMwPdda-sxOAJnbeTJz5NQ_Wlftgj0r';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let isGuest = false;
+        let allScripts = [];
+        let currentScript = null;
+        let base64ImageCache = '';
+
+        const OWNER = 'Irqcliver'; 
+        let starAdmins = JSON.parse(localStorage.getItem('s7_star_admins') || '[]');
+        let bannedIps = JSON.parse(localStorage.getItem('s7_banned_ips') || '[]');
+        let allComments = JSON.parse(localStorage.getItem('s7_comments') || '{}');
+        let verifiedUsers = JSON.parse(localStorage.getItem('s7_verified_users') || '[]');
+        let viewedScripts = JSON.parse(localStorage.getItem('s7_viewed_scripts') || '{}');
+        let ratedScripts = JSON.parse(localStorage.getItem('s7_rated_scripts') || '{}');
+
+        // رابط صوره التوثيق (يمكنك استبدال الرابط أدناه برابط الصورة الخاص بك)
+        const VERIFIED_BADGE_IMG = 'https://api.iconify.design/lucide:badge-check.svg?color=%2338bdf8';
+
+        function playCyberSound(type = 'click') {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                if (type === 'welcome') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.6);
+                    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.8);
+                } else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                }
+            } catch(e) {}
+        }
+
+        window.addEventListener('load', async () => {
+            checkIpBan();
+            playCyberSound('welcome');
+            setTimeout(() => { 
+                document.getElementById('welcomeLoader').classList.add('hidden'); 
+            }, 900);
+            await fetchVerifiedUsersFromSupabase();
+            initAuth();
+            fetchScripts();
+            checkBroadcast();
+        });
+
+        async function checkBroadcast() {
+            try {
+                const { data } = await _supabase.from('settings').select('*').eq('key', 'active_broadcast').single();
+                if (data && data.value) {
+                    const lastShown = sessionStorage.getItem('last_shown_broadcast');
+                    if (lastShown !== data.value) {
+                        alert("Admin Broadcast Notice: \n\n" + data.value);
+                        sessionStorage.setItem('last_shown_broadcast', data.value);
+                    }
+                }
+            } catch(e) {}
+        }
+
+        async function sendSecureBroadcast() {
+            playCyberSound('click');
+            if (!isOwner()) {
+                alert('Security Error: Broadcast restricted to the owner (Irqcliver) only.');
+                return;
+            }
+
+            const message = document.getElementById('broadcastInput').value.trim();
+            if (!message) return alert('Please enter broadcast text.');
+
+            const { error } = await _supabase.from('settings').upsert({ 
+                key: 'active_broadcast', 
+                value: message 
+            });
+
+            if (error) {
+                alert('Failed to send broadcast due to database error.');
+            } else {
+                alert('Broadcast successfully sent to all users.');
+                document.getElementById('broadcastInput').value = '';
+            }
+        }
+
+        async function fetchVerifiedUsersFromSupabase() {
+            try {
+                const { data } = await _supabase.from('settings').select('*').eq('key', 'verified_users').single();
+                if (data && data.value) {
+                    verifiedUsers = JSON.parse(data.value);
+                }
+            } catch(e) {}
+        }
+
+        async function saveVerifiedUsersToSupabase() {
+            try {
+                await _supabase.from('settings').upsert({ key: 'verified_users', value: JSON.stringify(verifiedUsers) });
+            } catch(e) {}
+        }
+
+        async function checkIpBan() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                if (bannedIps.includes(data.ip)) {
+                    document.body.innerHTML = '<h1 style="color:red; text-align:center; margin-top:20vh;">Access Denied: Your IP has been banned from this hub.</h1>';
+                }
+            } catch(e) {}
+        }
+
+        async function initAuth() {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (user) {
+                currentUser = user;
+                isGuest = false;
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('overlay').classList.remove('active');
+            } else {
+                const localGuest = localStorage.getItem('s7_is_guest');
+                if (localGuest === 'true') {
+                    isGuest = true;
+                    currentUser = null;
+                    document.getElementById('loginModal').style.display = 'none';
+                    document.getElementById('overlay').classList.remove('active');
+                } else {
+                    document.getElementById('loginModal').style.display = 'block';
+                    document.getElementById('overlay').classList.add('active');
+                }
+            }
+            updateAuthUI();
+            _supabase.auth.onAuthStateChange((event, session) => {
+                if (session?.user) {
+                    currentUser = session.user;
+                    isGuest = false;
+                    localStorage.removeItem('s7_is_guest');
+                    document.getElementById('loginModal').style.display = 'none';
+                    document.getElementById('overlay').classList.remove('active');
+                }
+                updateAuthUI();
+            });
+        }
+
+        function loginAsGuest() {
+            playCyberSound('click');
+            isGuest = true;
+            currentUser = null;
+            localStorage.setItem('s7_is_guest', 'true');
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('overlay').classList.remove('active');
+            updateAuthUI();
+            fetchScripts();
+        }
+
+        function openLoginModalFromProfile() {
+            playCyberSound('click');
+            localStorage.removeItem('s7_is_guest');
+            isGuest = false;
+            document.getElementById('loginModal').style.display = 'block';
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function updateAuthUI() {
+            const sidebarContainer = document.getElementById('sidebarAuthBtnContainer');
+            const avatarImg = document.getElementById('headerUserAvatar');
+
+            if (currentUser) {
+                avatarImg.src = getCurrentAvatar();
+                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="logout()" style="width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444);">Logout</button>`;
+            } else if (isGuest) {
+                avatarImg.src = 'https://api.iconify.design/lucide:user-round.svg?color=%23a855f7';
+                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="openLoginModalFromProfile()" style="width: 100%;">Login Menu</button>`;
+            } else {
+                avatarImg.src = 'https://via.placeholder.com/40';
+                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="openLoginModalFromProfile()" style="width: 100%;">Login Menu</button>`;
+            }
+        }
+
+        async function loginWithProvider(provider) {
+            playCyberSound('click');
+            await _supabase.auth.signInWithOAuth({
+                provider: provider,
+                options: { redirectTo: window.location.origin + window.location.pathname }
+            });
+        }
+
+        async function logout() {
+            playCyberSound('click');
+            localStorage.removeItem('s7_is_guest');
+            isGuest = false;
+            await _supabase.auth.signOut();
+            location.reload();
+        }
+
+        function requireAuth(callback) {
+            playCyberSound('click');
+            if (!currentUser && !isGuest) {
+                document.getElementById('loginModal').style.display = 'block';
+                document.getElementById('overlay').classList.add('active');
+            } else if (isGuest) {
+                alert('Action restricted: Please sign in with GitHub to perform uploads or ratings.');
+                openLoginModalFromProfile();
+            } else {
+                callback();
+            }
+        }
+
+        function getCurrentUsername() {
+            if (currentUser) return currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0];
+            if (isGuest) return 'Guest';
+            return 'Guest';
+        }
+
+        function getCurrentAvatar() {
+            if (currentUser) return currentUser.user_metadata?.avatar_url || currentUser.user_metadata?.picture || 'https://via.placeholder.com/40';
+            if (isGuest) return 'https://api.iconify.design/lucide:user-round.svg?color=%23a855f7';
+            return 'https://via.placeholder.com/40';
+        }
+
+        function isOwner() { if(!currentUser) return false; return getCurrentUsername() === OWNER; }
+        function isStarAdmin() { if(!currentUser) return false; return starAdmins.includes(getCurrentUsername()); }
+        function isVerified(username) { return verifiedUsers.includes(username); }
+
+        function canModifyScript(ownerName) {
+            if (!currentUser) return false;
+            const username = getCurrentUsername();
+            return isOwner() || isStarAdmin() || ownerName === username;
+        }
+
+        async function toggleVerifiedRole() {
+            playCyberSound('click');
+            if (!isOwner()) return alert('Access denied! Owner only.');
+            const target = document.getElementById('targetVerifiedInput').value.trim();
+            if (!target) return alert('Please enter target username.');
+
+            if (verifiedUsers.includes(target)) {
+                verifiedUsers = verifiedUsers.filter(u => u !== target);
+                alert(`Verification removed from ${target}`);
+            } else {
+                verifiedUsers.push(target);
+                alert(`Verification granted to ${target}`);
+            }
+
+            localStorage.setItem('s7_verified_users', JSON.stringify(verifiedUsers));
+            await saveVerifiedUsersToSupabase();
+            fetchScripts();
+            showProfile();
+        }
+
+        async function toggleAdminRole() {
+            playCyberSound('click');
+            if (!isOwner()) return alert('Access denied! Owner only.');
+            const target = document.getElementById('targetAdminInput').value.trim();
+            if (!target) return alert('Please enter a username.');
+
+            if (starAdmins.includes(target)) {
+                starAdmins = starAdmins.filter(u => u !== target);
+                alert(`Star Admin removed from ${target}`);
+            } else {
+                starAdmins.push(target);
+                alert(`Star Admin granted to ${target}`);
+            }
+            localStorage.setItem('s7_star_admins', JSON.stringify(starAdmins));
+            fetchScripts();
+            showProfile();
+        }
+
+        function banIpAddress() {
+            playCyberSound('click');
+            if (!isOwner() && !isStarAdmin()) return alert('Access denied!');
+            const ip = document.getElementById('targetIpInput').value.trim();
+            if (!ip) return alert('Enter a valid IP.');
+            bannedIps.push(ip);
+            localStorage.setItem('s7_banned_ips', JSON.stringify(bannedIps));
+            alert('IP successfully banned.');
+        }
+
+        function convertImageToBase64(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(uploadEvent) {
+                base64ImageCache = uploadEvent.target.result;
+                document.getElementById('upImageUrl').value = base64ImageCache;
+                document.getElementById('imgPreviewContainer').innerHTML = `<img src="${base64ImageCache}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 8px;">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function fetchScripts() {
+            await fetchVerifiedUsersFromSupabase();
+            const { data, error } = await _supabase.from('scripts').select('*').order('created_at', { ascending: false });
+            if (!error) {
+                allScripts = data || [];
+                const username = getCurrentUsername();
+                const visibleScripts = allScripts.filter(s => s.visibility === 'public' || (currentUser && (s.owner === username || isOwner() || isStarAdmin())));
+                renderScripts(visibleScripts, 'scriptGrid');
+                document.getElementById('scriptsCount').innerText = `${visibleScripts.length} scripts available`;
+            }
+        }
+
+        function renderScripts(scripts, containerId) {
+            const grid = document.getElementById(containerId);
+            grid.innerHTML = '';
+            if (!scripts.length) { grid.innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:30px;">No scripts available.</div>'; return; }
+
+            scripts.forEach((s) => {
+                const isItemOwner = s.owner === OWNER;
+                const isItemAdmin = starAdmins.includes(s.owner);
+                const isItemVerified = isVerified(s.owner);
+                const isPrivate = s.visibility === 'private';
+                
+                grid.innerHTML += `
+                    <div class="script-card" onclick="playCyberSound('click'); openScriptDetails(${s.id})">
+                        <div class="script-img" style="background-image: url('${s.thumbnail || 'https://via.placeholder.com/300x160'}');">
+                            ${isPrivate ? '<span class="private-badge">Private</span>' : ''}
+                            <span class="stats-badge">★ ${s.rating || 0} &nbsp;|&nbsp; 👁 ${s.views || 0}</span>
+                        </div>
+                        <div class="script-body">
+                            <div class="script-title">${s.title}</div>
+                            <div class="script-owner">
+                                Owner: ${s.owner} 
+                                ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''}
+                                ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''}
+                                ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function searchScripts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const username = getCurrentUsername();
+            const filtered = allScripts.filter(s => 
+                (s.visibility === 'public' || (currentUser && (s.owner === username || isOwner() || isStarAdmin()))) && 
+                (s.title.toLowerCase().includes(q) || s.features.toLowerCase().includes(q))
+            );
+            renderScripts(filtered, 'scriptGrid');
+        }
+
+        async function openScriptDetails(id) {
+            currentScript = allScripts.find(s => s.id === id);
+            if (!currentScript) return;
+            
+            if (!viewedScripts[id]) {
+                viewedScripts[id] = true;
+                localStorage.setItem('s7_viewed_scripts', JSON.stringify(viewedScripts));
+                const newViews = (currentScript.views || 0) + 1;
+                await _supabase.from('scripts').update({ views: newViews }).eq('id', id);
+                currentScript.views = newViews;
+            }
+
+            document.getElementById('detailTitle').innerText = currentScript.title;
+            const isItemOwner = currentScript.owner === OWNER;
+            const isItemAdmin = starAdmins.includes(currentScript.owner);
+            const isItemVerified = isVerified(currentScript.owner);
+
+            document.getElementById('detailMeta').innerHTML = `Views: ${currentScript.views || 0} | Rating: ★ ${currentScript.rating || 0} | Owner: ${currentScript.owner} ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''} ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''} ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}`;
+            document.getElementById('detailImg').style.backgroundImage = `url('${currentScript.thumbnail || 'https://via.placeholder.com/300x160'}')`;
+            document.getElementById('detailDesc').innerText = currentScript.features;
+            document.getElementById('detailCode').innerText = currentScript.script_code;
+
+            const rateBtn = document.getElementById('rateBtn');
+            if (ratedScripts[id]) {
+                rateBtn.innerText = 'Unrate (-1 Star)';
+                rateBtn.style.borderColor = '#ef4444';
+                rateBtn.style.color = '#ef4444';
+            } else {
+                rateBtn.innerText = 'Rate (+1 Star)';
+                rateBtn.style.borderColor = 'var(--border-color)';
+                rateBtn.style.color = '#d8b4fe';
+            }
+
+            const ownerActions = document.getElementById('ownerActions');
+            if (canModifyScript(currentScript.owner)) {
+                ownerActions.style.display = 'flex';
+            } else {
+                ownerActions.style.display = 'none';
+            }
+
+            renderComments(id);
+
+            hideAllPages();
+            document.getElementById('detailPage').style.display = 'block';
+        }
+
+        function renderComments(scriptId) {
+            const commentsContainer = document.getElementById('commentsList');
+            commentsContainer.innerHTML = '';
+            const scriptComments = allComments[scriptId] || [];
+
+            if (!scriptComments.length) {
+                commentsContainer.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:10px;">No comments yet. Be the first to comment!</p>';
+                return;
+            }
+
+            scriptComments.forEach(c => {
+                const verifiedMark = isVerified(c.author) ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : '';
+                commentsContainer.innerHTML += `
+                    <div class="comment-item">
+                        <img src="${c.avatar}" class="comment-avatar" alt="Avatar">
+                        <div class="comment-content">
+                            <div class="comment-author">${c.author} ${verifiedMark}</div>
+                            <div class="comment-text">${c.text}</div>
+                        </div>
+                    </div>
+                    <hr class="comment-divider">
+                `;
+            });
+        }
+
+        function postComment() {
+            playCyberSound('click');
+            if (isGuest) {
+                alert('Action restricted: Please sign in with GitHub to post comments.');
+                openLoginModalFromProfile();
+                return;
+            }
+            const text = document.getElementById('commentInputText').value.trim();
+            if (!text) return alert('Please enter a comment.');
+
+            const scriptId = currentScript.id;
+            if (!allComments[scriptId]) allComments[scriptId] = [];
+
+            allComments[scriptId].push({
+                author: getCurrentUsername(),
+                avatar: getCurrentAvatar(),
+                text: text
+            });
+
+            localStorage.setItem('s7_comments', JSON.stringify(allComments));
+            document.getElementById('commentInputText').value = '';
+            renderComments(scriptId);
+        }
+
+        async function toggleRating() {
+            playCyberSound('click');
+            requireAuth(async () => {
+                if (!currentScript) return;
+                const id = currentScript.id;
+                let currentRating = currentScript.rating || 0;
+                const rateBtn = document.getElementById('rateBtn');
+
+                if (ratedScripts[id]) {
+                    currentRating = Math.max(0, currentRating - 1);
+                    delete ratedScripts[id];
+                    rateBtn.innerText = 'Rate (+1 Star)';
+                    rateBtn.style.borderColor = 'var(--border-color)';
+                    rateBtn.style.color = '#d8b4fe';
+                    alert('Rating removed successfully.');
+                } else {
+                    currentRating += 1;
+                    ratedScripts[id] = true;
+                    rateBtn.innerText = 'Unrate (-1 Star)';
+                    rateBtn.style.borderColor = '#ef4444';
+                    rateBtn.style.color = '#ef4444';
+                    alert('Rating added successfully.');
+                }
+
+                localStorage.setItem('s7_rated_scripts', JSON.stringify(ratedScripts));
+                await _supabase.from('scripts').update({ rating: currentRating }).eq('id', id);
+                currentScript.rating = currentRating;
+                
+                const isItemOwner = currentScript.owner === OWNER;
+                const isItemAdmin = starAdmins.includes(currentScript.owner);
+                const isItemVerified = isVerified(currentScript.owner);
+                document.getElementById('detailMeta').innerHTML = `Views: ${currentScript.views || 0} | Rating: ★ ${currentScript.rating || 0} | Owner: ${currentScript.owner} ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''} ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''} ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}`;
+                
+                await fetchScripts();
+            });
+        }
+
+        function showUpload() {
+            playCyberSound('click');
+            requireAuth(() => {
+                hideAllPages();
+                document.getElementById('uploadFormTitle').innerText = "Upload New Script";
+                document.getElementById('uploadSubmitBtn').innerText = "Upload";
+                document.getElementById('editScriptId').value = '';
+                document.getElementById('upTitle').value = '';
+                document.getElementById('upGameId').value = '';
+                document.getElementById('upImageUrl').value = '';
+                document.getElementById('upImageFile').value = '';
+                document.getElementById('imgPreviewContainer').innerHTML = '';
+                document.getElementById('upFeatures').value = '';
+                document.getElementById('upCode').value = '';
+                document.getElementById('upVisibility').value = 'public';
+                document.getElementById('uploadPage').style.display = 'block';
+            });
+        }
+
+        function openEditMode() {
+            playCyberSound('click');
+            if (!currentScript) return;
+            hideAllPages();
+            document.getElementById('uploadFormTitle').innerText = "Edit Script";
+            document.getElementById('uploadSubmitBtn').innerText = "Save Changes";
+            document.getElementById('editScriptId').value = currentScript.id;
+            document.getElementById('upTitle').value = currentScript.title;
+            document.getElementById('upGameId').value = currentScript.game_id || '';
+            document.getElementById('upImageUrl').value = currentScript.thumbnail || '';
+            document.getElementById('imgPreviewContainer').innerHTML = currentScript.thumbnail ? `<img src="${currentScript.thumbnail}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 8px;">` : '';
+            document.getElementById('upFeatures').value = currentScript.features;
+            document.getElementById('upCode').value = currentScript.script_code;
+            document.getElementById('upVisibility').value = currentScript.visibility || 'public';
+            document.getElementById('uploadPage').style.display = 'block';
+        }
+
+        async function handleUploadSubmit(e) {
+            e.preventDefault();
+            playCyberSound('click');
+            if (isGuest) {
+                alert('Action restricted: Please sign in with GitHub to upload scripts.');
+                openLoginModalFromProfile();
+                return;
+            }
+            if (!currentUser) return;
+
+            const editId = document.getElementById('editScriptId').value;
+            const username = getCurrentUsername();
+
+            const scriptData = {
+                title: document.getElementById('upTitle').value,
+                game_id: document.getElementById('upGameId').value || 'Universal',
+                thumbnail: document.getElementById('upImageUrl').value || 'https://via.placeholder.com/300x160',
+                features: document.getElementById('upFeatures').value,
+                script_code: document.getElementById('upCode').value,
+                visibility: document.getElementById('upVisibility').value,
+                owner: editId ? currentScript.owner : username
+            };
+
+            if (editId) {
+                const { error } = await _supabase.from('scripts').update(scriptData).eq('id', editId);
+                if (!error) { alert('Script updated successfully.'); await fetchScripts(); showHome(); }
+            } else {
+                const { error } = await _supabase.from('scripts').insert([scriptData]);
+                if (!error) { alert('Script uploaded successfully.'); e.target.reset(); await fetchScripts(); showHome(); }
+            }
+        }
+
+        async function deleteCurrentScript() {
+            playCyberSound('click');
+            if (!currentScript) return;
+            if (!confirm('Are you sure you want to delete this script?')) return;
+
+            const { error } = await _supabase.from('scripts').delete().eq('id', currentScript.id);
+            if (!error) { alert('Script deleted successfully.'); await fetchScripts(); showHome(); }
+        }
+
+        function showProfile() {
+            playCyberSound('click');
+            hideAllPages();
+            document.getElementById('profilePage').style.display = 'block';
+            
+            const profileTitle = document.getElementById('profileTitle');
+            const profileSubText = document.getElementById('profileSubText');
+            const guestPrompt = document.getElementById('guestLoginPromptContainer');
+
+            if (currentUser) {
+                const username = getCurrentUsername();
+                profileTitle.innerText = `User Profile: ${username}`;
+                profileSubText.innerText = `Manage your scripts and account below:`;
+                guestPrompt.style.display = 'none';
+
+                if (isOwner()) {
+                    document.getElementById('ownerControlPanel').style.display = 'block';
+                } else {
+                    document.getElementById('ownerControlPanel').style.display = 'none';
+                }
+                
+                const userScripts = (isOwner() || isStarAdmin()) ? allScripts : allScripts.filter(s => s.owner === username);
+                renderScripts(userScripts, 'userScriptGrid');
+            } else if (isGuest) {
+                profileTitle.innerText = `Guest Profile`;
+                profileSubText.innerText = `You are currently browsing as a Guest. Sign in with GitHub to enable script uploading and management.`;
+                guestPrompt.style.display = 'block';
+                document.getElementById('ownerControlPanel').style.display = 'none';
+                document.getElementById('userScriptGrid').innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:20px;">Sign in with GitHub to view your personal scripts.</div>';
+            } else {
+                profileTitle.innerText = `Guest Profile`;
+                profileSubText.innerText = `You are browsing as Guest.`;
+                guestPrompt.style.display = 'block';
+                document.getElementById('ownerControlPanel').style.display = 'none';
+                document.getElementById('userScriptGrid').innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:20px;">Please select an option to continue.</div>';
+            }
+        }
+
+        function openSidebar() { playCyberSound('click'); document.getElementById('sidebar').classList.add('active'); document.getElementById('overlay').classList.add('active'); }
+        function closeSidebar() { playCyberSound('click'); document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
+        function showHome() { playCyberSound('click'); hideAllPages(); document.getElementById('homePage').style.display = 'block'; fetchScripts(); }
+        function hideAllPages() { document.getElementById('homePage').style.display = 'none'; document.getElementById('detailPage').style.display = 'none'; document.getElementById('uploadPage').style.display = 'none'; document.getElementById('profilePage').style.display = 'none'; }
+        function copyScriptCode() { playCyberSound('click'); navigator.clipboard.writeText(currentScript.script_code); alert('Script code copied to clipboard.'); }
+    </script>
+</body>
+</html>
