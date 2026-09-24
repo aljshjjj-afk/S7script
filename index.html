@@ -1,1209 +1,1486 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S7 SCRIPT</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --bg-deep: #030007;
-            --bg-card: rgba(14, 6, 26, 0.85);
-            --neon-primary: #a855f7;
-            --neon-glow: rgba(168, 85, 247, 0.4);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(168, 85, 247, 0.3);
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S7 COMMUNITY</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <base href="./">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(126, 34, 206, 0.2) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(88, 28, 135, 0.2) 0%, transparent 45%),
-                linear-gradient(135deg, #030007 0%, #0a0118 100%);
-            background-attachment: fixed;
-        }
+<style id="s7-premium">
+:root{--bg:#050509;--panel:rgba(15,15,24,.72);--panel2:rgba(22,22,35,.88);--line:rgba(145,92,255,.24);--purple:#d00000;--blue:#d00000;--text:#f8f7ff;--muted:#aaa8bc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,#260000 0,#0b0812 34%,#050509 70%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;min-height:100vh;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0 35%,rgba(139,92,246,.025) 50%,transparent 65%);z-index:-1}
+nav{position:sticky;top:14px;z-index:1000;width:min(1180px,calc(100% - 24px));margin:14px auto 24px;background:rgba(8,8,14,.78);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.45),0 0 40px rgba(139,92,246,.08)}.nav-container{height:68px;padding:0 20px;display:flex;align-items:center;justify-content:space-between}.logo-text{font-size:30px;font-weight:950;letter-spacing:4px;background:linear-gradient(135deg,#fff,#ff3b3b 55%,#d00000);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 28px rgba(139,92,246,.3)}.menu-icon{width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.05);cursor:pointer;font-size:23px;transition:.25s}.menu-icon:hover{transform:translateY(-2px);border-color:rgba(139,92,246,.6);box-shadow:0 0 25px rgba(139,92,246,.18)}#menu{list-style:none;margin:0;padding:0 12px 14px;display:flex;gap:8px;align-items:center;justify-content:center}#menu>li{position:relative;padding:13px 17px;border:1px solid transparent;border-radius:14px;color:#dedbea;cursor:pointer;transition:.2s;font-weight:700}#menu>li:hover,#menu>li.expanded{background:rgba(139,92,246,.11);border-color:rgba(139,92,246,.22);color:#fff}.has-submenu>span{display:inline-flex;align-items:center;gap:9px}.sub-arrow{margin-right:9px;font-size:11px;transition:.25s}.expanded .sub-arrow{transform:rotate(180deg)}.submenu{position:absolute;top:calc(100% + 9px);right:0;min-width:220px;padding:8px;list-style:none;background:rgba(11,10,18,.97);border:1px solid rgba(139,92,246,.3);border-radius:16px;box-shadow:0 22px 50px rgba(0,0,0,.5),0 0 30px rgba(139,92,246,.1);display:none}.submenu.open{display:block;animation:drop .2s ease}.submenu li{padding:12px 13px;border-radius:11px;color:#c8c4d6;transition:.2s}.submenu li:hover{background:linear-gradient(90deg,rgba(139,92,246,.18),rgba(56,189,248,.08));color:#fff;transform:translateX(-3px)}@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.page-content{display:none;min-height:70vh}.container{width:min(1080px,calc(100% - 28px));margin:auto;padding:30px 0 70px}.container>h1{text-align:center;font-size:clamp(48px,10vw,92px);line-height:1;margin:15px 0 8px;font-weight:1000;letter-spacing:8px;background:linear-gradient(135deg,#fff 15%,#ff3b3b 55%,#d00000);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 28px rgba(139,92,246,.2))}.fortnite-image{display:block;width:min(190px,55vw);aspect-ratio:1;object-fit:cover;margin:22px auto;border-radius:32px;border:1px solid rgba(255,255,255,.13);box-shadow:0 25px 70px rgba(0,0,0,.45),0 0 45px rgba(139,92,246,.16);transition:.3s}.fortnite-image:hover{transform:translateY(-5px) scale(1.015)}.welcome-text{text-align:center;color:var(--muted);font-size:18px;margin:20px auto 34px}.highlight{color:#b99cff;font-weight:900}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.feature-item{position:relative;overflow:hidden;padding:25px 18px;text-align:center;background:linear-gradient(145deg,rgba(25,24,38,.82),rgba(10,10,17,.82));border:1px solid rgba(139,92,246,.2);border-radius:22px;cursor:pointer;transition:.28s;box-shadow:0 15px 40px rgba(0,0,0,.22)}.feature-item:before{content:"";position:absolute;inset:-80px;background:radial-gradient(circle,rgba(139,92,246,.14),transparent 55%);opacity:0;transition:.3s}.feature-item:hover{transform:translateY(-7px);border-color:rgba(139,92,246,.55);box-shadow:0 20px 55px rgba(0,0,0,.4),0 0 35px rgba(139,92,246,.1)}.feature-item:hover:before{opacity:1}.feature-item>*{position:relative}.feature-item i{font-size:30px;margin-bottom:12px;color:#ff3b3b}.feature-item h3{margin:7px 0;font-size:18px}.feature-item p{margin:0;color:#9d99ac;font-size:13px;line-height:1.7}
+.delta-content{display:grid;grid-template-columns:minmax(230px,.8fr) 1.2fr;gap:22px;align-items:center;padding:22px;margin:20px 0;background:linear-gradient(145deg,rgba(18,17,29,.86),rgba(8,8,14,.9));border:1px solid rgba(139,92,246,.18);border-radius:26px;box-shadow:0 18px 50px rgba(0,0,0,.25);transition:.25s}.delta-content:hover{border-color:rgba(139,92,246,.4);transform:translateY(-2px)}.delta-image{width:100%;max-height:330px;object-fit:cover;border-radius:19px;border:1px solid rgba(255,255,255,.09)}.info-box{padding:5px}.info-box h2{margin:0 0 15px;font-size:24px}.info-box ul{margin:0 0 20px;padding-right:22px;color:#aaa7b9;line-height:2}.btn-wrapper{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.download-btn,.social-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;color:#fff!important;border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:12px 17px;background:linear-gradient(135deg,#a00000,#6b0000)!important;box-shadow:0 10px 25px rgba(79,70,229,.18);transition:.22s}.download-btn:hover,.social-btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 14px 32px rgba(124,58,237,.25)}.status-badge{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:11px;font-size:12px;font-weight:900;border:1px solid}.working{background:rgba(34,197,94,.1);color:#6ee7a0;border-color:rgba(34,197,94,.22)}.not-working{background:rgba(239,68,68,.09);color:#fca5a5;border-color:rgba(239,68,68,.2)}.social-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:30px 0}.social-btn{min-width:145px}.copyright{text-align:center;color:#6e6a7b;font-size:12px;padding:20px}
+.platform-chooser{position:fixed;inset:0;z-index:2000;display:none;place-items:center;padding:18px;background:rgba(0,0,0,.7);backdrop-filter:blur(12px)}.platform-chooser.open{display:grid}.chooser-content{position:relative;width:min(560px,100%);padding:30px;background:linear-gradient(145deg,#151321,#090910);border:1px solid rgba(139,92,246,.35);border-radius:28px;box-shadow:0 30px 100px rgba(0,0,0,.7),0 0 60px rgba(139,92,246,.12);animation:pop .2s ease}.chooser-close{position:absolute;top:12px;left:14px;width:38px;height:38px;border:0;border-radius:12px;background:rgba(255,255,255,.06);color:#fff;font-size:25px;cursor:pointer}.chooser-content h3{text-align:center;font-size:25px;margin:5px 0 8px}.chooser-subtitle{text-align:center;color:#858194;margin:0 0 22px}.chooser-options{display:grid;grid-template-columns:1fr 1fr;gap:14px}.chooser-btn{border:1px solid rgba(139,92,246,.2);border-radius:20px;padding:23px 15px;background:rgba(255,255,255,.035);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:9px;transition:.25s}.chooser-btn:hover{transform:translateY(-4px);background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.5)}.chooser-btn i{font-size:30px;color:#ff3b3b}.chooser-btn-title{font-weight:900;font-size:16px}.chooser-btn-desc{font-size:12px;color:#888498}@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@media(max-width:850px){#menu{display:none;flex-direction:column;align-items:stretch;padding:8px 12px 14px}#menu.active{display:flex}#menu>li{width:100%;text-align:right}.submenu{position:static;margin-top:8px;width:100%;box-shadow:none;background:rgba(255,255,255,.025)}.features-grid{grid-template-columns:1fr 1fr}.delta-content{grid-template-columns:1fr}.delta-image{max-height:260px}.container{padding-top:15px}}
+@media(max-width:520px){.features-grid{grid-template-columns:1fr}.nav-container{height:62px}.logo-text{font-size:25px}.container>h1{font-size:58px}.welcome-text{font-size:15px}.delta-content{padding:15px;border-radius:20px}.info-box h2{font-size:20px}.chooser-options{grid-template-columns:1fr}.social-btn{width:100%}}
 
-        .welcome-loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #030007; z-index: 9999; display: flex;
-            flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s ease;
-        }
-        .welcome-loader.hidden { opacity: 0; visibility: hidden; }
-        .loader-logo { 
-            font-size: 38px; font-weight: 900; color: #fff; 
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px var(--neon-primary), 0 0 60px rgba(168, 85, 247, 0.6); 
-            text-align: center;
-        }
+/* S7 BLOOD THEME */
+html,body{background:#050000!important;}
+body{background-image:linear-gradient(rgba(20,0,0,.55),rgba(5,0,0,.78)),url("https://cdn.discordapp.com/attachments/1523077322536779837/1552675398108848249/a33629e2815e1343a77b49f9db8bccd3.gif?ex=6ab67926&is=6ab527a6&hm=2ee69867a5661ec3405957bbb853fec3b46e8d01d2fde3f254320e2d902398fe&")!important;background-size:cover!important;background-position:center!important;background-attachment:fixed!important;}
+body::before{background:radial-gradient(circle at 50% 10%,rgba(180,0,0,.25),transparent 38%),linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))!important;}
+.s7-nav,.navbar,.nav-container{border-color:rgba(180,0,0,.45)!important;background:rgba(12,0,0,.78)!important;box-shadow:0 0 28px rgba(150,0,0,.22)!important;}
+.logo,.s7-logo,.brand{color:#ff2020!important;text-shadow:0 0 18px rgba(255,0,0,.75)!important;}
+button,.btn,.download-btn,.social-btn{border-color:rgba(255,40,40,.55)!important;}
+.card,.delta-content,.info-box,.container,.content-card{border-color:rgba(180,0,0,.3)!important;background:rgba(15,0,0,.62)!important;box-shadow:0 0 25px rgba(130,0,0,.16)!important;}
+h1,h2,h3,.highlight{color:#ff3030!important;text-shadow:0 0 14px rgba(255,0,0,.42)!important;}
+::-webkit-scrollbar-thumb{background:linear-gradient(#ff2020,#8b0000)!important;}
+::selection{background:#8b0000!important;color:#fff!important;}
 
-        header { 
-            background: rgba(10, 4, 20, 0.92); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color); 
-            padding: 12px 25px; display: flex; justify-content: space-between; 
-            align-items: center; position: sticky; top: 0; z-index: 100; 
-        }
-        .logo { 
-            font-size: 22px; font-weight: 900; color: #fff; 
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--neon-primary); cursor: pointer; 
-            display: flex; align-items: center; gap: 8px; 
-        }
+</style>
+<link rel="icon" href="https://cdn.discordapp.com/attachments/1523077322536779837/1552675411257725099/e361858f4281e004452c21011d84d4ac.png?ex=6ab67929&is=6ab527a9&hm=3833e8044fa943269fdffcf8990cb4ec5ac624b9bbc22d7e0acc425c0de6c38b&">
 
-        .top-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(14, 6, 26, 0.9);
-            border: 1px solid var(--border-color);
-            padding: 4px;
-            border-radius: 14px;
-        }
-        .tool-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #d8b4fe;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        .tool-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .tool-btn:hover { background: rgba(168, 85, 247, 0.15); border-color: var(--border-color); color: #fff; }
+<style id="s7-image-theme">
+html, body {
+  background: #05020b url("https://cdn.discordapp.com/attachments/1523077322536779837/1552675411257725099/e361858f4281e004452c21011d84d4ac.png?ex=6ab67929&is=6ab527a9&hm=3833e8044fa943269fdffcf8990cb4ec5ac624b9bbc22d7e0acc425c0de6c38b&") center center / cover fixed no-repeat !important;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(3,0,12,.88), rgba(7,1,18,.94));
+  backdrop-filter: blur(2px);
+}
+.s7-site-image { width: min(220px, 58vw); aspect-ratio: 1; object-fit: cover; border-radius: 28px; display:block; margin: 0 auto 22px; box-shadow: 0 0 55px rgba(137,55,255,.45); border: 1px solid rgba(174,113,255,.35); }
+</style>
 
-        .toolbar-divider { width: 1px; height: 24px; background: var(--border-color); margin: 0 4px; }
+<style id="s7-bloody-theme">
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+:root{--blood:#b30000;--blood2:#ff1a1a;--deep:#070000;--black:#020202;--text:#fff;--muted:#b9a8a8;--line:rgba(255,20,20,.28)}
+html,body{font-family:'Cairo',Tahoma,Arial,sans-serif!important}
+body{background-color:#020000!important;background-image:linear-gradient(rgba(0,0,0,.48),rgba(0,0,0,.68)),url('https://cdn.discordapp.com/attachments/1523077322536779837/1552675398108848249/a33629e2815e1343a77b49f9db8bccd3.gif?ex=6ab67926&is=6ab527a6&hm=2ee69867a5661ec3405957bbb853fec3b46e8d01d2fde3f254320e2d902398fe&')!important;background-size:cover!important;background-position:center!important;background-attachment:fixed!important;background-repeat:no-repeat!important;color:#fff!important}
+body:before{background:radial-gradient(circle at 50% 0,rgba(180,0,0,.16),transparent 42%),linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.42))!important}
+nav{background:rgba(5,0,0,.82)!important;border-color:rgba(255,20,20,.32)!important;box-shadow:0 18px 60px rgba(0,0,0,.65),0 0 45px rgba(180,0,0,.14)!important}
+.logo-text,.logo-text *{background:linear-gradient(135deg,#fff 10%,#ff4a4a 55%,#a80000)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;text-shadow:0 0 28px rgba(255,0,0,.35)!important}
+#menu>li:hover,#menu>li.expanded{background:rgba(180,0,0,.16)!important;border-color:rgba(255,30,30,.3)!important}
+.menu-icon:hover{border-color:rgba(255,30,30,.7)!important;box-shadow:0 0 25px rgba(255,0,0,.22)!important}
+.card,.info-box,.delta-content,.platform-card,.container,.section-card{border-color:rgba(255,20,20,.2)!important;box-shadow:0 15px 45px rgba(0,0,0,.5),0 0 25px rgba(160,0,0,.07)!important}
+button,.download-btn,.social-btn,.app-btn{border-color:rgba(255,25,25,.3)!important}
+.download-btn,.social-btn,.app-btn{background:linear-gradient(135deg,#c40000,#5e0000)!important;color:#fff!important;box-shadow:0 8px 25px rgba(150,0,0,.25)!important}
+.download-btn:hover,.social-btn:hover,.app-btn:hover{background:linear-gradient(135deg,#ed1111,#820000)!important;box-shadow:0 0 28px rgba(255,0,0,.3)!important}
+.working{background:rgba(160,0,0,.16)!important;color:#ff8a8a!important;border-color:rgba(255,40,40,.28)!important}
+.not-working{background:rgba(80,0,0,.2)!important;color:#ff6b6b!important;border-color:rgba(255,40,40,.24)!important}
+.highlight,.accent,.section-title,.container h1,.container h2{color:#ff3030!important;text-shadow:0 0 18px rgba(255,0,0,.18)}
+a{color:#ff4b4b}
+a:hover{color:#fff}
+input,textarea,select{background:rgba(10,0,0,.8)!important;color:#fff!important;border-color:rgba(255,25,25,.25)!important}
+.platform-chooser{background:rgba(0,0,0,.78)!important}
+*{scrollbar-color:#8e0000 #050000}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:#050000}
+::-webkit-scrollbar-thumb{background:linear-gradient(#d00000,#5c0000);border-radius:20px}
+/* إزالة أي ألوان زرقاء/بنفسجية متبقية من الثيم */
+[style*="#d00000"],[style*="#6b0000"],[style*="#a00000"],[style*="#a00000"],[style*="#4d0000"]{background:linear-gradient(135deg,#c40000,#5e0000)!important}
+</style>
 
-        .user-avatar-badge {
-            width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
-            border: 1px solid var(--border-color); cursor: pointer; transition: 0.3s;
-        }
-        .user-avatar-badge:hover { border-color: var(--neon-primary); box-shadow: 0 0 10px var(--neon-glow); }
-
-        .btn-cyber {
-            background: linear-gradient(135deg, #7e22ce, #a855f7); color: #fff; border: none; padding: 10px 18px;
-            border-radius: 12px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 0 15px var(--neon-glow); transition: all 0.3s ease; font-size: 13px;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn-cyber:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--neon-primary); filter: brightness(1.1); }
-
-        .btn-cyber-alt { 
-            background: rgba(25, 10, 45, 0.9); color: #d8b4fe; border: 1px solid var(--border-color); 
-            padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 13px; 
-            transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn-cyber-alt:hover { border-color: var(--neon-primary); color: #fff; background: rgba(59, 7, 100, 0.6); }
-
-        .sidebar {
-            position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
-            background: rgba(10, 4, 20, 0.96); backdrop-filter: blur(20px);
-            border-left: 1px solid var(--border-color); z-index: 200;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .sidebar.active { right: 0; }
-        .sidebar-close { background: none; border: none; color: var(--neon-primary); font-size: 22px; cursor: pointer; align-self: flex-start; }
-        .sidebar-links { margin-top: 25px; display: flex; flex-direction: column; gap: 8px; }
-        .sidebar-links a, .sidebar-links button { 
-            color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; 
-            padding: 12px 14px; border-radius: 12px; cursor: pointer; background: transparent; border: none; text-align: left;
-            transition: 0.2s; display: flex; align-items: center; gap: 12px;
-        }
-        .sidebar-links a:hover, .sidebar-links button:hover { background: rgba(168, 85, 247, 0.15); color: #fff; transform: translateX(4px); }
-
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); display: none; z-index: 150; }
-        .overlay.active { display: block; }
-
-        .login-modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            background: var(--bg-card); backdrop-filter: blur(25px); border: 1px solid var(--border-color); border-radius: 18px;
-            padding: 35px; width: 90%; max-width: 420px; text-align: center;
-            z-index: 300; display: none; box-shadow: 0 0 50px rgba(168, 85, 247, 0.35);
-        }
-        .login-modal h2 { color: #fff; margin-bottom: 8px; font-size: 22px; }
-        .login-modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 25px; }
-        
-        .login-options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .login-card-option {
-            background: rgba(5, 2, 10, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 20px 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-        .login-card-option:hover {
-            border-color: var(--neon-primary);
-            background: rgba(40, 10, 70, 0.8);
-            transform: translateY(-3px);
-        }
-        .login-card-option img { width: 45px; height: 45px; object-fit: contain; }
-        .login-card-option span { color: #fff; font-size: 13px; font-weight: bold; }
-
-        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
-        .search-area-wrapper { max-width: 750px; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 12px; }
-        .search-container { display: flex; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 6px; }
-        .search-container input { flex: 1; background: transparent; border: none; padding: 12px 16px; color: #fff; outline: none; font-size: 14px; }
-        .upload-row-right { display: flex; justify-content: flex-end; width: 100%; }
-
-        .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .script-card { 
-            background: var(--bg-card); border: 1px solid var(--border-color); 
-            border-radius: 16px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; position: relative;
-        }
-        .script-card:hover { border-color: var(--neon-primary); transform: translateY(-4px); }
-        .script-img { width: 100%; height: 160px; background-size: cover; background-position: center; position: relative; }
-        .stats-badge { position: absolute; top: 12px; right: 12px; background: rgba(5,2,10,0.85); color: #d8b4fe; font-size: 11px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .private-badge { position: absolute; top: 12px; left: 12px; background: rgba(239, 68, 68, 0.85); color: #fff; font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: bold; }
-        
-        .script-body { padding: 16px; }
-        .script-title { font-weight: bold; color: #fff; font-size: 16px; margin-bottom: 6px; }
-        .script-owner { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        
-        .badge-owner { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; font-size: 10px; padding: 2px 7px; border-radius: 12px; font-weight: 900; }
-        .badge-admin { background: linear-gradient(135deg, #ec4899, #be185d); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 12px; font-weight: 900; }
-        .badge-devs { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 12px; font-weight: 900; }
-        
-        .badge-verified-img {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-            vertical-align: middle;
-            display: inline-block;
-            margin-left: 2px;
-        }
-
-        .detail-page { display: none; }
-        .detail-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 25px; margin-bottom: 20px; }
-        .detail-header { display: flex; gap: 25px; flex-wrap: wrap; }
-        .detail-img { width: 100%; max-width: 340px; height: 200px; border-radius: 12px; background-size: cover; background-position: center; border: 1px solid var(--border-color); }
-        
-        .code-container { background: var(--bg-deep); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-top: 15px; }
-        .code-box { font-family: monospace; color: #d8b4fe; font-size: 13px; word-break: break-all; white-space: pre-wrap; max-height: 250px; overflow-y: auto; }
-
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
-        .form-control, .form-select { width: 100%; background: rgba(5, 2, 10, 0.85); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; color: #fff; outline: none; font-size: 14px; }
-        
-        .comments-section { margin-top: 25px; }
-        .comment-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; }
-        .comment-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
-        .comment-content { flex: 1; }
-        .comment-author { font-weight: bold; font-size: 14px; color: #fff; display: flex; align-items: center; gap: 4px; }
-        .comment-text { font-size: 13px; color: var(--text-muted); margin-top: 4px; word-break: break-word; }
-        .comment-divider { border: 0; height: 1px; background: var(--border-color); margin: 8px 0; }
-
-        .assigned-list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 8px;
-            max-height: 120px;
-            overflow-y: auto;
-            width: 100%;
-            max-width: 320px;
-        }
-        .assigned-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-        }
-        .remove-badge-btn {
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            transition: 0.2s;
-        }
-        .remove-badge-btn:hover { background: #dc2626; transform: scale(1.1); }
-
-        footer { text-align: center; padding: 25px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 50px; font-size: 13px; background: rgba(3, 0, 7, 0.6); }
-        footer a { color: #d8b4fe; text-decoration: none; font-weight: bold; }
-    </style>
+<style id="s7-original-layer">
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap');
+:root{--blood:#b30000;--red:#e10600;--bright:#ff3030;--black:#050000;--panel:rgba(13,0,0,.78);--line:rgba(255,35,35,.20)}
+html,body{font-family:'Cairo','Tajawal',system-ui,sans-serif!important}
+body{background-color:#030000!important;background-image:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.72)),url('https://cdn.discordapp.com/attachments/1523077322536779837/1552675398108848249/a33629e2815e1343a77b49f9db8bccd3.gif?ex=6ab67926&is=6ab527a6&hm=2ee69867a5661ec3405957bbb853fec3b46e8d01d2fde3f254320e2d902398fe&')!important;background-size:cover!important;background-position:center!important;background-attachment:fixed!important}
+body:before{background:radial-gradient(circle at 50% 0,rgba(255,0,0,.15),transparent 40%),linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.65))!important}
+nav{border-color:rgba(255,20,20,.25)!important;background:rgba(5,0,0,.84)!important}
+.logo-text{font-family:'Cairo',sans-serif!important;font-weight:900!important;color:#fff!important;text-shadow:0 0 20px rgba(255,0,0,.5)!important}
+.features-grid,.hack-grid{font-family:'Cairo','Tajawal',sans-serif}
+.features-grid .feature-item,.delta-content,.info-box,.content-card,.card{border-color:var(--line)!important;background:rgba(8,0,0,.72)!important}
+.features-grid .feature-item:hover,.delta-content:hover{border-color:rgba(255,40,40,.55)!important;box-shadow:0 0 30px rgba(180,0,0,.22)!important;transform:translateY(-3px)}
+.features-grid i,.feature-item h3,.highlight{color:#ff3030!important}
+.catalog-head{text-align:center;margin-bottom:20px}.live-pill{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid rgba(255,40,40,.35);border-radius:999px;background:rgba(100,0,0,.22);color:#ff5252;font-size:13px}.live-pill i{font-size:8px;animation:livePulse 1.1s infinite}@keyframes livePulse{50%{opacity:.25;transform:scale(.75)}}
+.hack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.hack-card{position:relative;overflow:hidden;border:1px solid rgba(255,25,25,.18);border-radius:22px;background:linear-gradient(145deg,rgba(18,0,0,.88),rgba(4,0,0,.88));box-shadow:0 15px 45px rgba(0,0,0,.35);transition:.25s}.hack-card:hover{transform:translateY(-5px);border-color:rgba(255,50,50,.5);box-shadow:0 0 34px rgba(180,0,0,.22)}.hack-cover{height:170px;width:100%;object-fit:cover;background:#100000}.hack-body{padding:17px}.hack-title{font-size:22px;font-weight:900;margin:0 0 4px}.hack-meta{font-size:12px;color:#aaa}.variant-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.variant{padding:13px;border:1px solid rgba(255,30,30,.18);border-radius:15px;background:rgba(255,0,0,.035)}.variant strong{display:block;font-size:14px}.variant small{display:block;color:#999;margin:4px 0 9px}.variant a{display:block;text-align:center;padding:9px;border-radius:10px;background:#8e0000;color:#fff;text-decoration:none;font-weight:800}.variant a:hover{background:#d00000}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ef2020;margin-left:5px}.status-ok{background:#2fb344}.announcement-box{padding:16px 18px;margin:0 0 18px;border-radius:18px;border:1px solid rgba(255,40,40,.22);background:rgba(90,0,0,.25);color:#eee}.announcement-box b{color:#ff3b3b}.empty-state{text-align:center;padding:45px 20px;border:1px dashed rgba(255,40,40,.22);border-radius:20px;color:#aaa}
+@media(max-width:650px){.variant-row{grid-template-columns:1fr}.hack-grid{grid-template-columns:1fr}.hack-cover{height:145px}}
+</style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
 
-    <div class="welcome-loader" id="welcomeLoader">
-        <div class="loader-logo">WELCOME TO S7 SCRIPT</div>
-        <p style="color: var(--text-muted); margin-top: 12px; font-size: 13px; letter-spacing: 1px;">SECURE SCRIPT HUB ENVIRONMENT</p>
+<nav>
+    <div class="nav-container">
+        <div class="logo-text">S7</div>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </div>
+    <ul id="menu">
+        <li onclick="showPage('home')">الصفحة الرئيسية</li>
+        <li class="has-submenu" onclick="toggleSubmenu(event, 'sub-iphone')">
+            <span><i class="fas fa-mobile-alt"></i> ايفون</span>
+            <i class="fas fa-chevron-down sub-arrow"></i>
+            <ul class="submenu" id="sub-iphone">
+                <li onclick="showCatalog('ios'); event.stopPropagation();">هاك روبلوكس ايفون</li>
+            </ul>
+        </li>
+        <li class="has-submenu" onclick="toggleSubmenu(event, 'sub-android')">
+            <span><i class="fab fa-android"></i> اندرويد</span>
+            <i class="fas fa-chevron-down sub-arrow"></i>
+            <ul class="submenu" id="sub-android">
+                <li onclick="showCatalog('android'); event.stopPropagation();">هاك روبلوكس اندرويد</li>
+            </ul>
+        </li>
+        <li class="has-submenu" onclick="toggleSubmenu(event, 'sub-pc')">
+            <span><i class="fas fa-laptop"></i> بي سي</span>
+            <i class="fas fa-chevron-down sub-arrow"></i>
+            <ul class="submenu" id="sub-pc">
+                <li onclick="showCatalog('pc'); event.stopPropagation();">هاك روبلوكس بي سي</li>
+            </ul>
+        </li>
+        <li onclick="showCatalog('all')"><i class="fas fa-layer-group"></i> مكتبة الهاكات</li>
+        <li onclick="showPage('buy-certificates')">الخدمات</li>
+    </ul>
+</nav>
 
-    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-    <div class="login-modal" id="loginModal" style="display: block;">
-        <h2>Authentication Required</h2>
-        <p>Please choose your login method to continue</p>
-        <div class="login-options-grid">
-            <div class="login-card-option" onclick="loginWithProvider('github')">
-                <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub">
-                <span>GitHub Login</span>
-            </div>
-            <div class="login-card-option" onclick="loginAsGuest()">
-                <img src="https://api.iconify.design/lucide:user-round.svg?color=%23a855f7" alt="Guest" style="filter: invert(1);">
-                <span>Guest Access</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="sidebar" id="sidebar">
-        <div>
-            <button class="sidebar-close" onclick="closeSidebar()">X</button>
-            <div class="sidebar-links">
-                <a onclick="showHome(); closeSidebar();">Home</a>
-                <a onclick="showOurScripts(); closeSidebar();">سكربتاتنا (Our Scripts)</a>
-                <div id="sidebarUploadLinkContainer">
-                    <a onclick="showUpload(); closeSidebar();">Upload</a>
-                </div>
-                <a onclick="showProfile(); closeSidebar();">Profile</a>
-                <a href="https://discord.gg/mDZt6YeJdc" target="_blank">Discord Server</a>
-            </div>
-        </div>
-        <div>
-            <div id="sidebarAuthBtnContainer"></div>
-        </div>
-    </div>
-
-    <header>
-        <div class="logo" onclick="showHome()">S7 SCRIPT</div>
-        
-        <div class="top-toolbar">
-            <button class="tool-btn" onclick="showHome()" title="Home">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-            <div class="toolbar-divider"></div>
-            <button class="tool-btn" onclick="showOurScripts()" title="Our Scripts">
-                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            </button>
-            <div class="toolbar-divider"></div>
-            <div id="headerUploadBtnContainer" style="display:inline-flex; align-items:center;">
-                <button class="tool-btn" onclick="showUpload()" title="Upload">
-                    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
-                <div class="toolbar-divider"></div>
-            </div>
-            <button class="tool-btn" onclick="showProfile()" title="Profile">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
-            <div class="toolbar-divider"></div>
-            <button class="tool-btn" onclick="openSidebar()" title="Menu">
-                <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-            <div class="toolbar-divider"></div>
-            <img src="https://via.placeholder.com/40" id="headerUserAvatar" class="user-avatar-badge" onclick="showProfile()" alt="Profile">
-        </div>
-    </header>
-
+<div id="home" class="page-content">
     <div class="container">
-        <div id="homePage">
-            <div class="search-area-wrapper">
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search community scripts..." onkeyup="searchScripts()">
-                    <button class="btn-cyber" onclick="searchScripts()">Search</button>
-                </div>
-                <div class="upload-row-right" id="homeUploadBtnContainer" style="display:flex;">
-                    <button class="btn-cyber" onclick="showUpload()">Upload</button>
-                </div>
+        <img class="s7-site-image" src="https://cdn.discordapp.com/attachments/1523077322536779837/1552675411257725099/e361858f4281e004452c21011d84d4ac.png?ex=6ab67929&is=6ab527a9&hm=3833e8044fa943269fdffcf8990cb4ec5ac624b9bbc22d7e0acc425c0de6c38b&" alt="S7">
+<h1>S7</h1>
+        <p class="welcome-text">مرحباً بكم في موقع <span class="highlight">S7</span></p>
+
+        <div class="features-grid">
+            <div class="feature-item" onclick="openChooser('iphone')">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>تطبيقات iOS</h3>
+                <</p>
             </div>
-
-            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="color: #fff; font-size: 20px;" id="hubSectionTitle">Community Scripts Hub</h2>
-                <span style="font-size: 12px; color: var(--text-muted);" id="scriptsCount">Loading...</span>
+            <div class="feature-item" onclick="openChooser('android')">
+                <i class="fab fa-android"></i>
+                <h3>تطبيقات Android</h3>
+                <</p>
             </div>
-            <div class="script-grid" id="scriptGrid"></div>
-        </div>
-
-        <div id="profilePage" class="detail-page">
-            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
-            <div class="detail-card">
-                <h2 style="color: #fff;" id="profileTitle">Guest Profile</h2>
-                <p style="color: var(--text-muted); margin-top: 5px;" id="profileSubText">You are browsing as Guest.</p>
-                
-                <div id="guestLoginPromptContainer" style="margin-top: 15px;">
-                    <button class="btn-cyber" onclick="openLoginModalFromProfile()">Login with GitHub</button>
-                </div>
-
-                <div id="ownerControlPanel" style="margin-top: 20px; display:none; padding: 20px; background: rgba(251,191,36,0.08); border: 1px solid #fbbf24; border-radius: 12px; text-align: center;">
-                    <h4 style="color: #fbbf24; margin-bottom: 5px;">Owner Control Panel</h4>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">صلاحيات المالك الكاملة: التحكم بالإذاعة، توثيق المستخدمين، ترقية الأدمن، ومطورين سكربتاتنا.</p>
-                    
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
-                        <input type="text" id="broadcastInput" class="form-control" placeholder="Enter broadcast message here..." style="max-width: 380px; text-align: center;">
-                        <button class="btn-cyber" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="sendSecureBroadcast()">Send Broadcast</button>
-                    </div>
-                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
-
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px;">
-                        <input type="text" id="targetVerifiedInput" class="form-control" placeholder="Username to verify" style="max-width: 320px; text-align: center;">
-                        <button class="btn-cyber" style="background: linear-gradient(135deg, #0284c7, #38bdf8);" onclick="addVerifiedRole()">Add Verification</button>
-                        <div id="verifiedListContainer" class="assigned-list-container"></div>
-                    </div>
-                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
-
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px;">
-                        <input type="text" id="targetAdminInput" class="form-control" placeholder="Username to make Admin" style="max-width: 320px; text-align: center;">
-                        <button class="btn-cyber" onclick="addAdminRole()">Add Star Admin</button>
-                        <div id="adminListContainer" class="assigned-list-container"></div>
-                    </div>
-                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
-
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px;">
-                        <input type="text" id="targetDevInput" class="form-control" placeholder="Username for 'Our Scripts' dev" style="max-width: 320px; text-align: center;">
-                        <button class="btn-cyber" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);" onclick="addDevRole()">Add to 'Our Scripts'</button>
-                        <div id="devListContainer" class="assigned-list-container"></div>
-                    </div>
-                    <hr style="border:0; height:1px; background:rgba(251,191,36,0.2); margin: 15px 0;">
-                    
-                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                        <input type="text" id="targetIpInput" class="form-control" placeholder="Enter IP address to ban" style="max-width: 280px; text-align: center;">
-                        <button class="btn-cyber" style="background: linear-gradient(135deg, #dc2626, #ef4444);" onclick="banIpAddress()">Ban IP</button>
-                    </div>
-                </div>
+            <div class="feature-item" onclick="openChooser('pc')">
+                <i class="fas fa-laptop"></i>
+                <h3>تطبيقات PC</h3>
+                <</p>
             </div>
-            <div class="script-grid" id="userScriptGrid"></div>
-        </div>
-
-        <div id="detailPage" class="detail-page">
-            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
-            <div class="detail-card">
-                <div class="detail-header">
-                    <div class="detail-img" id="detailImg"></div>
-                    <div style="flex:1;">
-                        <h1 id="detailTitle" style="color: #fff; font-size: 24px;"></h1>
-                        <div id="detailMeta" style="color: var(--text-muted); font-size: 13px; margin: 10px 0;"></div>
-                        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                            <button class="btn-cyber" onclick="copyScriptCode()">Copy Code</button>
-                            <button class="btn-cyber-alt" id="rateBtn" onclick="toggleRating()">Rate (+1 Star)</button>
-                            <div id="ownerActions" style="display:none; gap: 10px;">
-                                <button class="btn-cyber-alt" onclick="openEditMode()" style="border-color: #fbbf24; color: #fbbf24;">Edit</button>
-                                <button class="btn-cyber-alt" onclick="deleteCurrentScript()" style="border-color: #ef4444; color: #ef4444;">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="detail-card">
-                <h3 style="color:#fff; margin-bottom: 10px;">Features</h3>
-                <p style="color:var(--text-muted); line-height: 1.6;" id="detailDesc"></p>
-            </div>
-            <div class="detail-card">
-                <h3 style="color:#fff; margin-bottom: 10px;">Script Code</h3>
-                <div class="code-container"><div class="code-box" id="detailCode"></div></div>
-            </div>
-
-            <div class="detail-card comments-section">
-                <h3 style="color:#fff; margin-bottom: 15px;">Comments</h3>
-                <div id="commentsList"></div>
-                
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-                    <textarea id="commentInputText" class="form-control" rows="2" placeholder="Write your comment here..."></textarea>
-                    <button class="btn-cyber" onclick="postComment()" style="align-self: flex-end;">Post Comment</button>
-                </div>
+            <div class="feature-item" onclick="showPage('buy-certificates')">
+                <i class="fas fa-shield-alt"></i>
+                <h3>حماية وأمان</h3>
+                <p>تطبيقات آمنة وموثوقة</p>
             </div>
         </div>
 
-        <div id="uploadPage" class="detail-page">
-            <button class="btn-cyber-alt" onclick="showHome()" style="margin-bottom: 15px;">Back to Home</button>
-            <div class="detail-card">
-                <h2 style="color:#fff; text-align: center; margin-bottom: 20px;" id="uploadFormTitle">Upload New Script</h2>
-                <form onsubmit="handleUploadSubmit(event)">
-                    <input type="hidden" id="editScriptId">
-                    <div class="form-group"><label>Script Title</label><input type="text" id="upTitle" class="form-control" required></div>
-                    <div class="form-group"><label>Game ID</label><input type="text" id="upGameId" class="form-control" placeholder="Universal or Game ID"></div>
-                    <div class="form-group">
-                        <label>Thumbnail Image</label>
-                        <input type="file" id="upImageFile" class="form-control" accept="image/*" onchange="convertImageToBase64(event)">
-                        <input type="hidden" id="upImageUrl">
-                        <div id="imgPreviewContainer" style="margin-top: 8px;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Visibility Status</label>
-                        <select id="upVisibility" class="form-select">
-                            <option value="public">Public</option>
-                            <option value="private">Private</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Features Description</label><textarea id="upFeatures" class="form-control" rows="3" required></textarea></div>
-                    <div class="form-group"><label>Script Code</label><textarea id="upCode" class="form-control" rows="6" style="font-family: monospace;" required></textarea></div>
-                    <button type="submit" class="btn-cyber" style="width: 100%; padding: 13px;" id="uploadSubmitBtn">Upload</button>
-                </form>
-            </div>
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
         </div>
     </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7 COMMUNITY</div>
+</div>
 
-    <footer>
-        Developed by <b>S7 SCRIPT</b>
-    </footer>
+<!-- ====== iOS RO BLOX ====== -->
+<div id="roblox" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">مرحباً بك في موقع <span class="highlight">S7</span> هنا لدينا هاك دلتا للايفون</p>
 
-    <script>
-        const SUPABASE_URL = 'https://omikpwffrqlxsyibsqgm.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_LMwPdda-sxOAJnbeTJz5NQ_Wlftgj0r';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/JhrQQYV2/E367-C7-D2-4750-4524-ADD5-B9-A8-DA953734.png" alt="Delta Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك دلتا</h2>
+                <ul>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge working"><span class="status-text">يعمل</span><span class="status-icon">✓</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://delta.bz/manifest.plist" class="download-btn delta-btn-1" style="background-color: #000000;" draggable="false">
+                        <i class="fas fa-download"></i> Delta Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/CxZljM/CxZljM.plist" class="download-btn delta-btn-2" style="background-color: #000000;" draggable="false">
+                            <i class="fas fa-download"></i> Delta Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        let currentUser = null;
-        let isGuest = false;
-        let allScripts = [];
-        let currentScript = null;
-        let base64ImageCache = '';
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/3xNZTSKc/IMG-2739.jpg" alt="Skipx Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سكيبكس</h2>
+                <ul>
+                    <li>من غير مفتاح</li>
+                    <li>يوجد بحث سكربتات</li>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/pyzvF7/pyzvF7.plist" class="download-btn" style="background: linear-gradient(135deg, #a00000, #4d0000);" draggable="false">
+                        <i class="fas fa-download"></i> Skibx Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/" class="download-btn" style="background: linear-gradient(135deg, #a00000, #4d0000);" draggable="false">
+                            <i class="fas fa-download"></i> Skibx VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const OWNER = 'Irqcliver'; 
-        let starAdmins = JSON.parse(localStorage.getItem('s7_star_admins') || '[]');
-        let ourScriptDevs = JSON.parse(localStorage.getItem('s7_our_script_devs') || '[]');
-        let bannedIps = JSON.parse(localStorage.getItem('s7_banned_ips') || '[]');
-        let allComments = JSON.parse(localStorage.getItem('s7_comments') || '{}');
-        let verifiedUsers = JSON.parse(localStorage.getItem('s7_verified_users') || '[]');
-        let viewedScripts = JSON.parse(localStorage.getItem('s7_viewed_scripts') || '{}');
-        let ratedScripts = JSON.parse(localStorage.getItem('s7_rated_scripts') || '{}');
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/KvQcmP/KvQcmP.plist" class="download-btn" style="background: linear-gradient(135deg, #FF5722, #BF360C);" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/" class="download-btn" style="background: linear-gradient(135deg, #FF5722, #BF360C);" draggable="false">
+                            <i class="fas fa-download"></i> Ronix VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const VERIFIED_BADGE_IMG = 'https://api.iconify.design/lucide:badge-check.svg?color=%2338bdf8';
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تحميل الهاك</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بالضغط على زر التحميل الخاص بالهاك الذي تريده.</li>
+                    <li>سيظهر لك إشعار يطلب منك تثبيت التطبيق، اضغط على تثبيت.</li>
+                    <li>اذهب إلى الإعدادات > عام > إدارة الأجهزة وقم بتوثيق الشهادة.</li>
+                    <li>افتح التطبيق واستمتع باللعب!</li>
+                </ul>
+            </div>
+        </div>
 
-        function playCyberSound(type = 'click') {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7 COMMUNITY</div>
+</div>
 
-                if (type === 'welcome') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.6);
-                    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.8);
-                } else {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(450, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.1);
-                    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.1);
-                }
-            } catch(e) {}
+
+<section id="catalog" class="page-content">
+  <div class="container">
+    <div class="catalog-head">
+      <span class="live-pill"><i class="fas fa-circle"></i> S7 LIVE</span>
+      <h1 id="catalog-title">مكتبة S7</h1>
+      <p class="welcome-text" id="catalog-subtitle">النسخ والتحديثات تنسحب مباشرة من لوحة S7.</p>
+    </div>
+    <div id="announcement-box" class="announcement-box" hidden></div>
+    <div id="hack-grid" class="hack-grid"></div>
+  </div>
+</section>
+
+<!-- ====== Android RO BLOX ====== -->
+<div id="roblox-android" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">قم بتنزيل هاك روبلوكس للأندرويد واستمتع بمميزات حصرية!</p>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/JhrQQYV2/E367-C7-D2-4750-4524-ADD5-B9-A8-DA953734.png" alt="Delta Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك دلتا</h2>
+                <ul>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/po23i3yqtdkzz3r/Delta-2.738.1397.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Delta Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/cri936gp9gz9qzv/Delta-2.717.985-VN.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Delta VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/vZgLmbJg/IMG-0210.webp" alt="Codex Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك كوديكس</h2>
+                <ul>
+                    <li>حمايه جيده</li>
+                    <li>خلفية الهاك جيده</li>
+                    <li>بحث سكربتات متطور</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/2vcq4h8gk516qbq/Codex+v2.731.944.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> CODEX Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/3py7clwl1zxm5oo/Codex+V2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> CODEX VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/T10Hb1Yr/IMG-0211.jpg" alt="Arceus X Neo Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك ارسيوس اكس نيو</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>من افضل الهاكات</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge working"><span class="status-text">يعمل</span><span class="status-icon">✓</span></span>
+                    <a href="https://www.mediafire.com/file/pjrv7etqxm3sm72/Roblox.Arceus.X.NEO.2.3.5.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Arceus X Neo Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/kokmytxnkzryr2p/Roblox.-.VNG.Arceus.X.NEO.2.1.6.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Arceus X Neo VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/3xNZTSKc/IMG-2739.jpg" alt="Skipx Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سكيبكس</h2>
+                <ul>
+                    <li>من غير مفتاح</li>
+                    <li>يوجد بحث سكربتات</li>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/k5heu723g0mds62/SkibX-2.727_skibx.org.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Skibx Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/khh1d18x0sbdfc6/SkibX-2.707.734.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Skibx VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/90kgbSZM/30-DD9793-DD7-B-4-F30-8516-52-A9156-CDB2-E.png" alt="Cryptic Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك كرايبتك</h2>
+                <ul>
+                    <li>حمايه جيده</li>
+                    <li>قائمه و خلفيه مميزه</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/nec8pvnz0bxrn0b/Cryptic+APK+2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Cryptic Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/2cw9hn5kg5x1vk1/Cryptic.2.689.CrypticExecutor.com+[s7top1].apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Cryptic VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/arjvslvfejkn8dy/Roblox.-.Arceus.X.v5.1.5.1.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/cut0tioprp921tt/Ronix_32Bits-2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Ronix VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/pVBsdmST/44-CA8-C7-A-50-BD-4-B09-9-AF1-5-E232-BA37165.png" alt="Trigon Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك تريجون</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/qz1e8szhyvnnisv/com.roblox.client_2.730.790_trigon.apk/file?dkey=e5g80otvv0r&r=752" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Trigon Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/D00bkwJ5/IMG-0264.png" alt="Vega X Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك فيجا اكس</h2>
+                <ul>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                    <li>حمايه جيده</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/a1xkbytour4xksc/Vega.X+8.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Vega X Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تحميل الهاك للأندرويد</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بتحميل ملف APK الخاص بالهاك.</li>
+                    <li>إذا ظهر لك تحذير "تطبيق غير معروف"، اذهب للإعدادات وفعل خيار "تثبيت من مصادر غير معروفة".</li>
+                    <li>قم بتثبيت الملف وافتحه لبدء اللعب.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7 COMMUNITY</div>
+</div>
+
+<!-- ====== PC RO BLOX ====== -->
+<div id="roblox-pc" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">قم بتنزيل هاك روبلوكس للكمبيوتر واستمتع بمميزات حصرية!</p>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/4xtBj52Z/4219495-A-FC75-4-E7-A-9546-B644-BCF4-EA85.png" alt="Semo Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سيمو</h2>
+                <ul>
+                    <li>من افضل الهاكات حمايتاً</li>
+                    <li>لايوجد مفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://discord.gg/mDZt6YeJdc" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Semo Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/J7d5g8q9/IMG-4356.png" alt="Velocity Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك فيلوسيتي</h2>
+                <ul>
+                    <li>أداء سريع وفعال</li>
+                    <li>واجهة مستخدم متقدمة</li>
+                    <li>حماية عالية الجودة</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/f0egpgwh11qvtz5/Velocity.zip/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Velocity Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/j5ygNhNZ/AD101609-C2-A8-4-E25-A2-E0-FEDFA8-C740-CF.png" alt="Xeno Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك اكسينو</h2>
+                <ul>
+                    <li>حماية اسطوريه</li>
+                    <li>يمكنك بحث سكربتات فيه</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/goesf9lti8iauga/Xeno-v1.3.60.exe/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Xeno Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://wrdcdn.net/r/154522/1769203129478/RonixInstaller_NEW.exe" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/pL7jDhDS/44-CA8-C7-A-50-BD-4-B09-9-AF1-5-E232-BA37165.png" alt="Trigon Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك تريجون</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/jwmwp9xhriyqkql/Trigon_Evo_0.2.6.exe/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Trigon Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تشغيل الهاك للكمبيوتر</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بتحميل الملف المضغوط وفك الضغط عنه.</li>
+                    <li>أغلق برنامج الحماية (Windows Defender) لتجنب حذف الهاك.</li>
+                    <li>افتح اللعبة ثم قم بتتشغيل الهاك كمسؤول (Run as Administrator).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7 COMMUNITY</div>
+</div>
+
+<
+
+<
+
+<
+
+<!-- ====== BUY CERTIFICATES ====== -->
+<div id="buy-certificates" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">خدمة الخدمات المطورين للايفون بأسعار منافسة!</p>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>لماذا تشتري شهادة؟</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>تثبيت تطبيقات بلس والألعاب المهكرة</li>
+                    <li>شهادة تدوم لمدة سنة كاملة</li>
+                    <li>دعم فني متواصل</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> تواصل عبر الديسكورد للشراء
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7 COMMUNITY</div>
+</div>
+
+<!-- ====== PLATFORM CHOOSER ====== -->
+<div id="platform-chooser" class="platform-chooser" onclick="if(event.target===this)closeChooser()">
+    <div class="chooser-content">
+        <button class="chooser-close" onclick="closeChooser()" aria-label="إغلاق">&times;</button>
+        <h3 id="chooser-title">اختر ما تريد</h3>
+        <p class="chooser-subtitle">اختر النسخة التي تريد تحميلها</p>
+        <div class="chooser-options">
+            <button class="chooser-btn chooser-hack" onclick="chooserGo('hack')">
+                <i class="fas fa-bolt"></i>
+                <span class="chooser-btn-title">هاك روبلوكس</span>
+                <span class="chooser-btn-desc">جميع هاكات الإكسيكيوتر</span>
+            </button>
+            <                <i class="fas fa-history"></i>
+                <span class="chooser-btn-title">روبلوكس القديمه</span>
+                <</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PLATFORM_INFO = {
+    };
+
+    function toggleMenu() {
+        document.getElementById("menu").classList.toggle("active");
+    }
+
+    function toggleSubmenu(e, submenuId) {
+        e.stopPropagation();
+        const submenu = document.getElementById(submenuId);
+        const parent = submenu.parentElement;
+        document.querySelectorAll(".submenu.open").forEach(s => {
+            if (s.id !== submenuId) {
+                s.classList.remove("open");
+                s.parentElement.classList.remove("expanded");
+            }
+        });
+        submenu.classList.toggle("open");
+        parent.classList.toggle("expanded");
+    }
+
+    function openChooser(platform) {
+        const info = PLATFORM_INFO[platform];
+        if (!info) return;
+        const modal = document.getElementById('platform-chooser');
+        modal.dataset.platform = platform;
+        document.getElementById('chooser-title').innerHTML = '<i class="' + info.icon + '"></i> اختر ما تريد لـ ' + info.title;
+        modal.classList.add('open');
+    }
+
+    function closeChooser() {
+        document.getElementById('platform-chooser').classList.remove('open');
+    }
+
+    function chooserGo(type) {
+        const modal = document.getElementById('platform-chooser');
+        const platform = modal.dataset.platform;
+        const info = PLATFORM_INFO[platform];
+        if (!info) return;
+        closeChooser();
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll(".page-content").forEach(page => {
+            page.style.display = "none";
+        });
+        const target = document.getElementById(pageId);
+        if (target) {
+            target.style.display = "block";
         }
+        document.getElementById("menu").classList.remove("active");
+        document.querySelectorAll(".submenu.open").forEach(s => {
+            s.classList.remove("open");
+            s.parentElement.classList.remove("expanded");
+        });
+        closeChooser();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        window.addEventListener('load', async () => {
-            checkIpBan();
-            playCyberSound('welcome');
-            setTimeout(() => { 
-                document.getElementById('welcomeLoader').classList.add('hidden'); 
-            }, 900);
-            await fetchSettingsFromSupabase();
-            initAuth();
-            fetchScripts();
-            checkBroadcast();
+    document.addEventListener("DOMContentLoaded", function () {
+        showPage('home');
+
+        const shield = (e) => {
+            if (e.target.tagName === 'A' || e.target.closest('a') || 
+                e.target.tagName === 'LI' || e.target.closest('li') || 
+                e.target.closest('.feature-item')) {
+                return true;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        };
+
+        ['contextmenu', 'copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(event => {
+            document.addEventListener(event, shield, true);
         });
 
-        async function checkBroadcast() {
-            try {
-                const { data } = await _supabase.from('settings').select('*').eq('key', 'active_broadcast').single();
-                if (data && data.value) {
-                    const lastShown = sessionStorage.getItem('last_shown_broadcast');
-                    if (lastShown !== data.value) {
-                        alert("Admin Broadcast Notice: \n\n" + data.value);
-                        sessionStorage.setItem('last_shown_broadcast', data.value);
-                    }
-                }
-            } catch(e) {}
-        }
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) e.preventDefault();
+        }, {passive: false});
 
-        async function sendSecureBroadcast() {
-            playCyberSound('click');
-            if (!isOwner()) {
-                alert('Security Error: Broadcast restricted to the owner (Irqcliver) only.');
-                return;
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+                e.preventDefault();
             }
+            if (e.key === 'F12') e.preventDefault();
+        });
+    });
+</script>
 
-            const message = document.getElementById('broadcastInput').value.trim();
-            if (!message) return alert('Please enter broadcast text.');
+<script id="s7-live-client">
+const S7_API='/api/site';
+let S7_DATA=null;
+async function loadS7Data(){
+ try{const r=await fetch(S7_API+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok)throw 0; S7_DATA=await r.json(); applyS7Data(); renderCatalog(window.S7_FILTER||'all');}
+ catch(e){console.warn('S7 live API unavailable; static site remains active.');}
+}
+function applyS7Data(){
+ if(!S7_DATA)return;
+ document.title=S7_DATA.site?.title||'S7'; const dc=document.querySelectorAll('.discord-btn'); dc.forEach(a=>a.href=S7_DATA.site?.discord||a.href); const yt=document.querySelectorAll('.youtube-btn'); yt.forEach(a=>a.href=S7_DATA.site?.youtube||a.href);
+ const a=S7_DATA.site?.announcement;
+ const box=document.getElementById('announcement-box');
+ if(box){box.hidden=!a;box.innerHTML=a?'<b>تحديث:</b> '+escapeHtml(a):'';}
+}
+function showCatalog(filter){window.S7_FILTER=filter||'all'; showPage('catalog'); renderCatalog(window.S7_FILTER);}
+function renderCatalog(filter){
+ const grid=document.getElementById('hack-grid'); if(!grid)return;
+ const hacks=(S7_DATA?.hacks||[]).filter(h=>filter==='all'||h.platform===filter);
+ if(!hacks.length){grid.innerHTML='<div class="empty-state">ماكو بيانات منشورة حالياً من لوحة S7.</div>';return;}
+ grid.innerHTML=hacks.map(h=>{const img=h.image||'https://cdn.discordapp.com/attachments/1523077322536779837/1552675411257725099/e361858f4281e004452c21011d84d4ac.png';const vs=h.variants||{};return `<article class="hack-card"><img class="hack-cover" src="${escapeAttr(img)}" alt="${escapeAttr(h.name)}"><div class="hack-body"><h2 class="hack-title">${escapeHtml(h.name)}</h2><div class="hack-meta">${escapeHtml(h.platformLabel||h.platform)} · آخر تحديث ${escapeHtml(h.version||'—')}</div><p>${escapeHtml(h.description||'تحديث منشور من S7')}</p><div class="variant-row">${variantCard('General',vs.General)}${variantCard('VNG',vs.VNG)}</div></div></article>`}).join('');
+}
+function variantCard(label,v){v=v||{};const ok=v.status!=='offline';return `<div class="variant"><strong><span class="status-dot ${ok?'status-ok':''}"></span> ${label}</strong><small>${escapeHtml(v.version||'بدون إصدار')} · ${escapeHtml(v.status||'متوفر')}</small>${v.download?`<a href="${escapeAttr(v.download)}" target="_blank" rel="noopener">تحميل</a>`:'<small>الرابط غير مضاف</small>'}</div>`}
+function escapeHtml(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function escapeAttr(x){return escapeHtml(x)}
+window.addEventListener('DOMContentLoaded',()=>{loadS7Data();});
+</script>
 
-            const { error } = await _supabase.from('settings').upsert({ 
-                key: 'active_broadcast', 
-                value: message 
-            });
+<script>
+const _openChooser=window.openChooser; window.openChooser=function(kind){ showCatalog(kind); };
+</script>
+</body>
+</html>
+"></i> بي سي</span>
+            <i class="fas fa-chevron-down sub-arrow"></i>
+            <ul class="submenu" id="sub-pc">
+                <li onclick="showCatalog('pc'); event.stopPropagation();">هاك روبلوكس بي سي</li>
+            </ul>
+        </li>
+        <li onclick="showCatalog('all')"><i class="fas fa-layer-group"></i> مكتبة الهاكات</li>
+        <li onclick="showPage('buy-certificates')">الخدمات</li>
+    </ul>
+</nav>
 
-            if (error) {
-                alert('Failed to send broadcast due to database error.');
-            } else {
-                alert('Broadcast successfully sent to all users.');
-                document.getElementById('broadcastInput').value = '';
-            }
-        }
+<div id="home" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">مرحباً بكم في موقع <span class="highlight">S7</span></p>
 
-        async function fetchSettingsFromSupabase() {
-            try {
-                const { data } = await _supabase.from('settings').select('*');
-                if (data) {
-                    data.forEach(item => {
-                        if (item.key === 'verified_users' && item.value) verifiedUsers = JSON.parse(item.value);
-                        if (item.key === 'star_admins' && item.value) starAdmins = JSON.parse(item.value);
-                        if (item.key === 'our_script_devs' && item.value) ourScriptDevs = JSON.parse(item.value);
-                    });
-                }
-            } catch(e) {}
-        }
+        <div class="features-grid">
+            <div class="feature-item" onclick="openChooser('iphone')">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>تطبيقات iOS</h3>
+                <</p>
+            </div>
+            <div class="feature-item" onclick="openChooser('android')">
+                <i class="fab fa-android"></i>
+                <h3>تطبيقات Android</h3>
+                <</p>
+            </div>
+            <div class="feature-item" onclick="openChooser('pc')">
+                <i class="fas fa-laptop"></i>
+                <h3>تطبيقات PC</h3>
+                <</p>
+            </div>
+            <div class="feature-item" onclick="showPage('buy-certificates')">
+                <i class="fas fa-shield-alt"></i>
+                <h3>حماية وأمان</h3>
+                <p>تطبيقات آمنة وموثوقة</p>
+            </div>
+        </div>
 
-        async function saveSettingsToSupabase(key, valueArr) {
-            try {
-                await _supabase.from('settings').upsert({ key: key, value: JSON.stringify(valueArr) });
-            } catch(e) {}
-        }
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7</div>
+</div>
 
-        async function checkIpBan() {
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                if (bannedIps.includes(data.ip)) {
-                    document.body.innerHTML = '<h1 style="color:red; text-align:center; margin-top:20vh;">Access Denied: Your IP has been banned from this hub.</h1>';
-                }
-            } catch(e) {}
-        }
+<!-- ====== iOS RO BLOX ====== -->
+<div id="roblox" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">مرحباً بك في موقع <span class="highlight">S7</span> هنا لدينا هاك دلتا للايفون</p>
 
-        async function initAuth() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (user) {
-                currentUser = user;
-                isGuest = false;
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('overlay').classList.remove('active');
-            } else {
-                const localGuest = localStorage.getItem('s7_is_guest');
-                if (localGuest === 'true') {
-                    isGuest = true;
-                    currentUser = null;
-                    document.getElementById('loginModal').style.display = 'none';
-                    document.getElementById('overlay').classList.remove('active');
-                } else {
-                    document.getElementById('loginModal').style.display = 'block';
-                    document.getElementById('overlay').classList.add('active');
-                }
-            }
-            updateAuthUI();
-            _supabase.auth.onAuthStateChange((event, session) => {
-                if (session?.user) {
-                    currentUser = session.user;
-                    isGuest = false;
-                    localStorage.removeItem('s7_is_guest');
-                    document.getElementById('loginModal').style.display = 'none';
-                    document.getElementById('overlay').classList.remove('active');
-                }
-                updateAuthUI();
-            });
-        }
-
-        function loginAsGuest() {
-            playCyberSound('click');
-            isGuest = true;
-            currentUser = null;
-            localStorage.setItem('s7_is_guest', 'true');
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('overlay').classList.remove('active');
-            updateAuthUI();
-            fetchScripts();
-        }
-
-        function openLoginModalFromProfile() {
-            playCyberSound('click');
-            localStorage.removeItem('s7_is_guest');
-            isGuest = false;
-            document.getElementById('loginModal').style.display = 'block';
-            document.getElementById('overlay').classList.add('active');
-        }
-
-        function canUploadScript() {
-            // السماح للجميع برفع السكربتات الآن
-            return true;
-        }
-
-        function updateAuthUI() {
-            const sidebarContainer = document.getElementById('sidebarAuthBtnContainer');
-            const avatarImg = document.getElementById('headerUserAvatar');
-
-            if (currentUser) {
-                avatarImg.src = getCurrentAvatar();
-                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="logout()" style="width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444);">Logout</button>`;
-            } else if (isGuest) {
-                avatarImg.src = 'https://api.iconify.design/lucide:user-round.svg?color=%23a855f7';
-                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="openLoginModalFromProfile()" style="width: 100%;">Login Menu</button>`;
-            } else {
-                avatarImg.src = 'https://via.placeholder.com/40';
-                sidebarContainer.innerHTML = `<button class="btn-cyber" onclick="openLoginModalFromProfile()" style="width: 100%;">Login Menu</button>`;
-            }
-        }
-
-        async function loginWithProvider(provider) {
-            playCyberSound('click');
-            await _supabase.auth.signInWithOAuth({
-                provider: provider,
-                options: { redirectTo: window.location.origin + window.location.pathname }
-            });
-        }
-
-        async function logout() {
-            playCyberSound('click');
-            localStorage.removeItem('s7_is_guest');
-            isGuest = false;
-            await _supabase.auth.signOut();
-            location.reload();
-        }
-
-        function requireAuth(callback) {
-            playCyberSound('click');
-            if (!currentUser && !isGuest) {
-                document.getElementById('loginModal').style.display = 'block';
-                document.getElementById('overlay').classList.add('active');
-            } else if (isGuest) {
-                alert('Action restricted: Please sign in with GitHub to perform ratings.');
-                openLoginModalFromProfile();
-            } else {
-                callback();
-            }
-        }
-
-        function getCurrentUsername() {
-            if (currentUser) return currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0];
-            if (isGuest) return 'Guest';
-            return 'Guest';
-        }
-
-        function getCurrentAvatar() {
-            if (currentUser) return currentUser.user_metadata?.avatar_url || currentUser.user_metadata?.picture || 'https://via.placeholder.com/40';
-            if (isGuest) return 'https://api.iconify.design/lucide:user-round.svg?color=%23a855f7';
-            return 'https://via.placeholder.com/40';
-        }
-
-        function isOwner() { if(!currentUser) return false; return getCurrentUsername() === OWNER; }
-        function isStarAdmin() { if(!currentUser) return false; return starAdmins.includes(getCurrentUsername()); }
-        function isVerified(username) { return verifiedUsers.includes(username); }
-        function isOurDev(username) { return ourScriptDevs.includes(username); }
-
-        function canModifyScript(ownerName) {
-            if (!currentUser) return false;
-            const username = getCurrentUsername();
-            return isOwner() || isStarAdmin() || ownerName === username;
-        }
-
-        async function addVerifiedRole() {
-            playCyberSound('click');
-            if (!isOwner()) return alert('Access denied! Owner only.');
-            const target = document.getElementById('targetVerifiedInput').value.trim();
-            if (!target) return alert('Please enter target username.');
-
-            if (!verifiedUsers.includes(target)) {
-                verifiedUsers.push(target);
-                localStorage.setItem('s7_verified_users', JSON.stringify(verifiedUsers));
-                await saveSettingsToSupabase('verified_users', verifiedUsers);
-                document.getElementById('targetVerifiedInput').value = '';
-                renderControlLists();
-                fetchScripts();
-                alert(`Verification granted to ${target}`);
-            } else {
-                alert('User is already verified.');
-            }
-        }
-
-        async function removeVerifiedRole(username) {
-            playCyberSound('click');
-            if (!isOwner()) return;
-            verifiedUsers = verifiedUsers.filter(u => u !== username);
-            localStorage.setItem('s7_verified_users', JSON.stringify(verifiedUsers));
-            await saveSettingsToSupabase('verified_users', verifiedUsers);
-            renderControlLists();
-            fetchScripts();
-        }
-
-        async function addAdminRole() {
-            playCyberSound('click');
-            if (!isOwner()) return alert('Access denied! Owner only.');
-            const target = document.getElementById('targetAdminInput').value.trim();
-            if (!target) return alert('Please enter a username.');
-
-            if (!starAdmins.includes(target)) {
-                starAdmins.push(target);
-                localStorage.setItem('s7_star_admins', JSON.stringify(starAdmins));
-                await saveSettingsToSupabase('star_admins', starAdmins);
-                document.getElementById('targetAdminInput').value = '';
-                renderControlLists();
-                fetchScripts();
-                updateAuthUI();
-                alert(`Star Admin granted to ${target}`);
-            } else {
-                alert('User is already Star Admin.');
-            }
-        }
-
-        async function removeAdminRole(username) {
-            playCyberSound('click');
-            if (!isOwner()) return;
-            starAdmins = starAdmins.filter(u => u !== username);
-            localStorage.setItem('s7_star_admins', JSON.stringify(starAdmins));
-            await saveSettingsToSupabase('star_admins', starAdmins);
-            renderControlLists();
-            fetchScripts();
-            updateAuthUI();
-        }
-
-        async function addDevRole() {
-            playCyberSound('click');
-            if (!isOwner()) return alert('Access denied! Owner only.');
-            const target = document.getElementById('targetDevInput').value.trim();
-            if (!target) return alert('Please enter a username.');
-
-            if (!ourScriptDevs.includes(target)) {
-                ourScriptDevs.push(target);
-                localStorage.setItem('s7_our_script_devs', JSON.stringify(ourScriptDevs));
-                await saveSettingsToSupabase('our_script_devs', ourScriptDevs);
-                document.getElementById('targetDevInput').value = '';
-                renderControlLists();
-                fetchScripts();
-                updateAuthUI();
-                alert(`Added ${target} to 'Our Scripts' developers.`);
-            } else {
-                alert('User is already in Our Scripts developers.');
-            }
-        }
-
-        async function removeDevRole(username) {
-            playCyberSound('click');
-            if (!isOwner()) return;
-            ourScriptDevs = ourScriptDevs.filter(u => u !== username);
-            localStorage.setItem('s7_our_script_devs', JSON.stringify(ourScriptDevs));
-            await saveSettingsToSupabase('our_script_devs', ourScriptDevs);
-            renderControlLists();
-            fetchScripts();
-            updateAuthUI();
-        }
-
-        function renderControlLists() {
-            const verifiedContainer = document.getElementById('verifiedListContainer');
-            if (verifiedContainer) {
-                verifiedContainer.innerHTML = '';
-                verifiedUsers.forEach(user => {
-                    verifiedContainer.innerHTML += `
-                        <div class="assigned-item-row">
-                            <span>${user}</span>
-                            <button class="remove-badge-btn" onclick="removeVerifiedRole('${user}')" title="Remove">X</button>
-                        </div>
-                    `;
-                });
-            }
-
-            const adminContainer = document.getElementById('adminListContainer');
-            if (adminContainer) {
-                adminContainer.innerHTML = '';
-                starAdmins.forEach(user => {
-                    adminContainer.innerHTML += `
-                        <div class="assigned-item-row">
-                            <span>${user}</span>
-                            <button class="remove-badge-btn" onclick="removeAdminRole('${user}')" title="Remove">X</button>
-                        </div>
-                    `;
-                });
-            }
-
-            const devContainer = document.getElementById('devListContainer');
-            if (devContainer) {
-                devContainer.innerHTML = '';
-                ourScriptDevs.forEach(user => {
-                    devContainer.innerHTML += `
-                        <div class="assigned-item-row">
-                            <span>${user}</span>
-                            <button class="remove-badge-btn" onclick="removeDevRole('${user}')" title="Remove">X</button>
-                        </div>
-                    `;
-                });
-            }
-        }
-
-        function banIpAddress() {
-            playCyberSound('click');
-            if (!isOwner() && !isStarAdmin()) return alert('Access denied!');
-            const ip = document.getElementById('targetIpInput').value.trim();
-            if (!ip) return alert('Enter a valid IP.');
-            bannedIps.push(ip);
-            localStorage.setItem('s7_banned_ips', JSON.stringify(bannedIps));
-            alert('IP successfully banned.');
-        }
-
-        function convertImageToBase64(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(uploadEvent) {
-                base64ImageCache = uploadEvent.target.result;
-                document.getElementById('upImageUrl').value = base64ImageCache;
-                document.getElementById('imgPreviewContainer').innerHTML = `<img src="${base64ImageCache}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 8px;">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function fetchScripts() {
-            await fetchSettingsFromSupabase();
-            const { data, error } = await _supabase.from('scripts').select('*').order('created_at', { ascending: false });
-            if (!error) {
-                allScripts = data || [];
-                const username = getCurrentUsername();
-                const visibleScripts = allScripts.filter(s => s.visibility === 'public' || (currentUser && (s.owner === username || isOwner() || isStarAdmin())));
-                renderScripts(visibleScripts, 'scriptGrid');
-                document.getElementById('scriptsCount').innerText = `${visibleScripts.length} scripts available`;
-            }
-        }
-
-        function renderScripts(scripts, containerId) {
-            const grid = document.getElementById(containerId);
-            grid.innerHTML = '';
-            if (!scripts.length) { grid.innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:30px;">No scripts available.</div>'; return; }
-
-            scripts.forEach((s) => {
-                const isItemOwner = s.owner === OWNER;
-                const isItemAdmin = starAdmins.includes(s.owner);
-                const isItemDev = ourScriptDevs.includes(s.owner);
-                const isItemVerified = isVerified(s.owner);
-                const isPrivate = s.visibility === 'private';
-                
-                grid.innerHTML += `
-                    <div class="script-card" onclick="playCyberSound('click'); openScriptDetails(${s.id})">
-                        <div class="script-img" style="background-image: url('${s.thumbnail || 'https://via.placeholder.com/300x160'}');">
-                            ${isPrivate ? '<span class="private-badge">Private</span>' : ''}
-                            <span class="stats-badge">★ ${s.rating || 0} &nbsp;|&nbsp; 👁 ${s.views || 0}</span>
-                        </div>
-                        <div class="script-body">
-                            <div class="script-title">${s.title}</div>
-                            <div class="script-owner">
-                                Owner: ${s.owner} 
-                                ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''}
-                                ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''}
-                                ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}
-                                ${isItemDev ? '<span class="badge-devs">OUR DEV</span>' : ''}
-                            </div>
-                        </div>
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/JhrQQYV2/E367-C7-D2-4750-4524-ADD5-B9-A8-DA953734.png" alt="Delta Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك دلتا</h2>
+                <ul>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge working"><span class="status-text">يعمل</span><span class="status-icon">✓</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://delta.bz/manifest.plist" class="download-btn delta-btn-1" style="background-color: #000000;" draggable="false">
+                        <i class="fas fa-download"></i> Delta Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/CxZljM/CxZljM.plist" class="download-btn delta-btn-2" style="background-color: #000000;" draggable="false">
+                            <i class="fas fa-download"></i> Delta Install
+                        </a>
                     </div>
-                `;
-            });
-        }
+                </div>
+            </div>
+        </div>
 
-        function searchScripts() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            const username = getCurrentUsername();
-            const filtered = allScripts.filter(s => 
-                (s.visibility === 'public' || (currentUser && (s.owner === username || isOwner() || isStarAdmin()))) && 
-                (s.title.toLowerCase().includes(q) || s.features.toLowerCase().includes(q))
-            );
-            renderScripts(filtered, 'scriptGrid');
-        }
-
-        function showOurScripts() {
-            playCyberSound('click');
-            hideAllPages();
-            document.getElementById('homePage').style.display = 'block';
-            document.getElementById('hubSectionTitle').innerText = "سكربتاتنا (Our Scripts - مطورونا المعتمدون)";
-            
-            const username = getCurrentUsername();
-            const ourFilteredScripts = allScripts.filter(s => 
-                isOurDev(s.owner) && (s.visibility === 'public' || (currentUser && (s.owner === username || isOwner() || isStarAdmin())))
-            );
-            renderScripts(ourFilteredScripts, 'scriptGrid');
-            document.getElementById('scriptsCount').innerText = `${ourFilteredScripts.length} developer scripts`;
-        }
-
-        async function openScriptDetails(id) {
-            currentScript = allScripts.find(s => s.id === id);
-            if (!currentScript) return;
-            
-            if (!viewedScripts[id]) {
-                viewedScripts[id] = true;
-                localStorage.setItem('s7_viewed_scripts', JSON.stringify(viewedScripts));
-                const newViews = (currentScript.views || 0) + 1;
-                await _supabase.from('scripts').update({ views: newViews }).eq('id', id);
-                currentScript.views = newViews;
-            }
-
-            document.getElementById('detailTitle').innerText = currentScript.title;
-            const isItemOwner = currentScript.owner === OWNER;
-            const isItemAdmin = starAdmins.includes(currentScript.owner);
-            const isItemDev = ourScriptDevs.includes(currentScript.owner);
-            const isItemVerified = isVerified(currentScript.owner);
-
-            document.getElementById('detailMeta').innerHTML = `Views: ${currentScript.views || 0} | Rating: ★ ${currentScript.rating || 0} | Owner: ${currentScript.owner} ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''} ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''} ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''} ${isItemDev ? '<span class="badge-devs">OUR DEV</span>' : ''}`;
-            document.getElementById('detailImg').style.backgroundImage = `url('${currentScript.thumbnail || 'https://via.placeholder.com/300x160'}')`;
-            document.getElementById('detailDesc').innerText = currentScript.features;
-            document.getElementById('detailCode').innerText = currentScript.script_code;
-
-            const rateBtn = document.getElementById('rateBtn');
-            if (ratedScripts[id]) {
-                rateBtn.innerText = 'Unrate (-1 Star)';
-                rateBtn.style.borderColor = '#ef4444';
-                rateBtn.style.color = '#ef4444';
-            } else {
-                rateBtn.innerText = 'Rate (+1 Star)';
-                rateBtn.style.borderColor = 'var(--border-color)';
-                rateBtn.style.color = '#d8b4fe';
-            }
-
-            const ownerActions = document.getElementById('ownerActions');
-            if (canModifyScript(currentScript.owner)) {
-                ownerActions.style.display = 'flex';
-            } else {
-                ownerActions.style.display = 'none';
-            }
-
-            renderComments(id);
-
-            hideAllPages();
-            document.getElementById('detailPage').style.display = 'block';
-        }
-
-        function renderComments(scriptId) {
-            const commentsContainer = document.getElementById('commentsList');
-            commentsContainer.innerHTML = '';
-            const scriptComments = allComments[scriptId] || [];
-
-            if (!scriptComments.length) {
-                commentsContainer.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:10px;">No comments yet. Be the first to comment!</p>';
-                return;
-            }
-
-            scriptComments.forEach(c => {
-                const verifiedMark = isVerified(c.author) ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : '';
-                commentsContainer.innerHTML += `
-                    <div class="comment-item">
-                        <img src="${c.avatar}" class="comment-avatar" alt="Avatar">
-                        <div class="comment-content">
-                            <div class="comment-author">${c.author} ${verifiedMark}</div>
-                            <div class="comment-text">${c.text}</div>
-                        </div>
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/3xNZTSKc/IMG-2739.jpg" alt="Skipx Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سكيبكس</h2>
+                <ul>
+                    <li>من غير مفتاح</li>
+                    <li>يوجد بحث سكربتات</li>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/pyzvF7/pyzvF7.plist" class="download-btn" style="background: linear-gradient(135deg, #a00000, #4d0000);" draggable="false">
+                        <i class="fas fa-download"></i> Skibx Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/" class="download-btn" style="background: linear-gradient(135deg, #a00000, #4d0000);" draggable="false">
+                            <i class="fas fa-download"></i> Skibx VNG Install
+                        </a>
                     </div>
-                    <hr class="comment-divider">
-                `;
-            });
-        }
+                </div>
+            </div>
+        </div>
 
-        function postComment() {
-            playCyberSound('click');
-            if (isGuest) {
-                alert('Action restricted: Please sign in with GitHub to post comments.');
-                openLoginModalFromProfile();
-                return;
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="itms-services://?action=download-manifest&url=https://www.installonair.com/storage/ipaz/KvQcmP/KvQcmP.plist" class="download-btn" style="background: linear-gradient(135deg, #FF5722, #BF360C);" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/" class="download-btn" style="background: linear-gradient(135deg, #FF5722, #BF360C);" draggable="false">
+                            <i class="fas fa-download"></i> Ronix VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تحميل الهاك</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بالضغط على زر التحميل الخاص بالهاك الذي تريده.</li>
+                    <li>سيظهر لك إشعار يطلب منك تثبيت التطبيق، اضغط على تثبيت.</li>
+                    <li>اذهب إلى الإعدادات > عام > إدارة الأجهزة وقم بتوثيق الشهادة.</li>
+                    <li>افتح التطبيق واستمتع باللعب!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7</div>
+</div>
+
+
+<section id="catalog" class="page-content">
+  <div class="container">
+    <div class="catalog-head">
+      <span class="live-pill"><i class="fas fa-circle"></i> S7 LIVE</span>
+      <h1 id="catalog-title">مكتبة S7</h1>
+      <p class="welcome-text" id="catalog-subtitle">النسخ والتحديثات تنسحب مباشرة من لوحة S7.</p>
+    </div>
+    <div id="announcement-box" class="announcement-box" hidden></div>
+    <div id="hack-grid" class="hack-grid"></div>
+  </div>
+</section>
+
+<!-- ====== Android RO BLOX ====== -->
+<div id="roblox-android" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">قم بتنزيل هاك روبلوكس للأندرويد واستمتع بمميزات حصرية!</p>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/JhrQQYV2/E367-C7-D2-4750-4524-ADD5-B9-A8-DA953734.png" alt="Delta Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك دلتا</h2>
+                <ul>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/po23i3yqtdkzz3r/Delta-2.738.1397.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Delta Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/cri936gp9gz9qzv/Delta-2.717.985-VN.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Delta VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/vZgLmbJg/IMG-0210.webp" alt="Codex Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك كوديكس</h2>
+                <ul>
+                    <li>حمايه جيده</li>
+                    <li>خلفية الهاك جيده</li>
+                    <li>بحث سكربتات متطور</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/2vcq4h8gk516qbq/Codex+v2.731.944.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> CODEX Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/3py7clwl1zxm5oo/Codex+V2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> CODEX VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/T10Hb1Yr/IMG-0211.jpg" alt="Arceus X Neo Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك ارسيوس اكس نيو</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>من افضل الهاكات</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge working"><span class="status-text">يعمل</span><span class="status-icon">✓</span></span>
+                    <a href="https://www.mediafire.com/file/pjrv7etqxm3sm72/Roblox.Arceus.X.NEO.2.3.5.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Arceus X Neo Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/kokmytxnkzryr2p/Roblox.-.VNG.Arceus.X.NEO.2.1.6.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Arceus X Neo VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/3xNZTSKc/IMG-2739.jpg" alt="Skipx Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سكيبكس</h2>
+                <ul>
+                    <li>من غير مفتاح</li>
+                    <li>يوجد بحث سكربتات</li>
+                    <li>من اقوى الهاكات حمايتاً</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/k5heu723g0mds62/SkibX-2.727_skibx.org.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Skibx Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/khh1d18x0sbdfc6/SkibX-2.707.734.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Skibx VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/90kgbSZM/30-DD9793-DD7-B-4-F30-8516-52-A9156-CDB2-E.png" alt="Cryptic Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك كرايبتك</h2>
+                <ul>
+                    <li>حمايه جيده</li>
+                    <li>قائمه و خلفيه مميزه</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/nec8pvnz0bxrn0b/Cryptic+APK+2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Cryptic Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/2cw9hn5kg5x1vk1/Cryptic.2.689.CrypticExecutor.com+[s7top1].apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Cryptic VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/arjvslvfejkn8dy/Roblox.-.Arceus.X.v5.1.5.1.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="btn-wrapper">
+                        <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                        <a href="https://www.mediafire.com/file/cut0tioprp921tt/Ronix_32Bits-2.710.707.apk/file" class="download-btn android-btn" draggable="false">
+                            <i class="fas fa-download"></i> Ronix VNG Install
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/pVBsdmST/44-CA8-C7-A-50-BD-4-B09-9-AF1-5-E232-BA37165.png" alt="Trigon Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك تريجون</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/qz1e8szhyvnnisv/com.roblox.client_2.730.790_trigon.apk/file?dkey=e5g80otvv0r&r=752" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Trigon Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/D00bkwJ5/IMG-0264.png" alt="Vega X Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك فيجا اكس</h2>
+                <ul>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                    <li>حمايه جيده</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/a1xkbytour4xksc/Vega.X+8.apk/file" class="download-btn android-btn" draggable="false">
+                        <i class="fas fa-download"></i> Vega X Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تحميل الهاك للأندرويد</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بتحميل ملف APK الخاص بالهاك.</li>
+                    <li>إذا ظهر لك تحذير "تطبيق غير معروف"، اذهب للإعدادات وفعل خيار "تثبيت من مصادر غير معروفة".</li>
+                    <li>قم بتثبيت الملف وافتحه لبدء اللعب.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7</div>
+</div>
+
+<!-- ====== PC RO BLOX ====== -->
+<div id="roblox-pc" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">قم بتنزيل هاك روبلوكس للكمبيوتر واستمتع بمميزات حصرية!</p>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/4xtBj52Z/4219495-A-FC75-4-E7-A-9546-B644-BCF4-EA85.png" alt="Semo Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك سيمو</h2>
+                <ul>
+                    <li>من افضل الهاكات حمايتاً</li>
+                    <li>لايوجد مفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://discord.gg/mDZt6YeJdc" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Semo Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/J7d5g8q9/IMG-4356.png" alt="Velocity Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك فيلوسيتي</h2>
+                <ul>
+                    <li>أداء سريع وفعال</li>
+                    <li>واجهة مستخدم متقدمة</li>
+                    <li>حماية عالية الجودة</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/f0egpgwh11qvtz5/Velocity.zip/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Velocity Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/j5ygNhNZ/AD101609-C2-A8-4-E25-A2-E0-FEDFA8-C740-CF.png" alt="Xeno Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك اكسينو</h2>
+                <ul>
+                    <li>حماية اسطوريه</li>
+                    <li>يمكنك بحث سكربتات فيه</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/goesf9lti8iauga/Xeno-v1.3.60.exe/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Xeno Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/K8kr3JYQ/togif.gif" alt="Ronix Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك رونيكس</h2>
+                <ul>
+                    <li>خلفيه و قائمه اسطوريه</li>
+                    <li>يمكنك بحث السكربتات فيه</li>
+                    <li>سهولة استخدامه</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://wrdcdn.net/r/154522/1769203129478/RonixInstaller_NEW.exe" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Ronix Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <img src="https://i.postimg.cc/pL7jDhDS/44-CA8-C7-A-50-BD-4-B09-9-AF1-5-E232-BA37165.png" alt="Trigon Features" class="delta-image">
+            <div class="info-box">
+                <h2>مميزات هاك تريجون</h2>
+                <ul>
+                    <li>حمايه ممتازه</li>
+                    <li>سهولة الحصول على المفتاح</li>
+                    <li>سهولة الاستخدام</li>
+                </ul>
+                <div class="btn-wrapper">
+                    <span class="status-badge not-working"><span class="status-text">لا يعمل</span><span class="status-icon">✕</span></span>
+                    <a href="https://www.mediafire.com/file/jwmwp9xhriyqkql/Trigon_Evo_0.2.6.exe/file" class="download-btn pc-btn" draggable="false">
+                        <i class="fas fa-download"></i> Trigon Install
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>شرح تشغيل الهاك للكمبيوتر</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>قم بتحميل الملف المضغوط وفك الضغط عنه.</li>
+                    <li>أغلق برنامج الحماية (Windows Defender) لتجنب حذف الهاك.</li>
+                    <li>افتح اللعبة ثم قم بتتشغيل الهاك كمسؤول (Run as Administrator).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> ديسكورد
+            </a>
+            <a href="https://s7261.github.io/S7/S7.mobileconfig" class="social-btn app-btn" draggable="false">
+                <i class="fas fa-mobile-alt"></i> تنزيل الموقع
+            </a>
+            <a href="https://youtube.com/@s7_scripter7?si=V-u0-r1RvuyoFPMG" target="_blank" class="social-btn youtube-btn" draggable="false">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7</div>
+</div>
+
+<
+
+<
+
+<
+
+<!-- ====== BUY CERTIFICATES ====== -->
+<div id="buy-certificates" class="page-content">
+    <div class="container">
+        <h1>S7</h1>
+        <p class="welcome-text">خدمة الخدمات المطورين للايفون بأسعار منافسة!</p>
+
+        <div class="delta-content">
+            <div class="info-box" style="text-align: center;">
+                <h2>لماذا تشتري شهادة؟</h2>
+                <ul style="display: inline-block; text-align: right;">
+                    <li>تثبيت تطبيقات بلس والألعاب المهكرة</li>
+                    <li>شهادة تدوم لمدة سنة كاملة</li>
+                    <li>دعم فني متواصل</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://discord.gg/mDZt6YeJdc" target="_blank" class="social-btn discord-btn" draggable="false">
+                <i class="fab fa-discord"></i> تواصل عبر الديسكورد للشراء
+            </a>
+        </div>
+    </div>
+    <div class="copyright">جميع الحقوق محفوظة © 2026 S7</div>
+</div>
+
+<!-- ====== PLATFORM CHOOSER ====== -->
+<div id="platform-chooser" class="platform-chooser" onclick="if(event.target===this)closeChooser()">
+    <div class="chooser-content">
+        <button class="chooser-close" onclick="closeChooser()" aria-label="إغلاق">&times;</button>
+        <h3 id="chooser-title">اختر ما تريد</h3>
+        <p class="chooser-subtitle">اختر النسخة التي تريد تحميلها</p>
+        <div class="chooser-options">
+            <button class="chooser-btn chooser-hack" onclick="chooserGo('hack')">
+                <i class="fas fa-bolt"></i>
+                <span class="chooser-btn-title">هاك روبلوكس</span>
+                <span class="chooser-btn-desc">جميع هاكات الإكسيكيوتر</span>
+            </button>
+            <                <i class="fas fa-history"></i>
+                <span class="chooser-btn-title">روبلوكس القديمه</span>
+                <</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PLATFORM_INFO = {
+    };
+
+    function toggleMenu() {
+        document.getElementById("menu").classList.toggle("active");
+    }
+
+    function toggleSubmenu(e, submenuId) {
+        e.stopPropagation();
+        const submenu = document.getElementById(submenuId);
+        const parent = submenu.parentElement;
+        document.querySelectorAll(".submenu.open").forEach(s => {
+            if (s.id !== submenuId) {
+                s.classList.remove("open");
+                s.parentElement.classList.remove("expanded");
             }
-            const text = document.getElementById('commentInputText').value.trim();
-            if (!text) return alert('Please enter a comment.');
+        });
+        submenu.classList.toggle("open");
+        parent.classList.toggle("expanded");
+    }
 
-            const scriptId = currentScript.id;
-            if (!allComments[scriptId]) allComments[scriptId] = [];
+    function openChooser(platform) {
+        const info = PLATFORM_INFO[platform];
+        if (!info) return;
+        const modal = document.getElementById('platform-chooser');
+        modal.dataset.platform = platform;
+        document.getElementById('chooser-title').innerHTML = '<i class="' + info.icon + '"></i> اختر ما تريد لـ ' + info.title;
+        modal.classList.add('open');
+    }
 
-            allComments[scriptId].push({
-                author: getCurrentUsername(),
-                avatar: getCurrentAvatar(),
-                text: text
-            });
+    function closeChooser() {
+        document.getElementById('platform-chooser').classList.remove('open');
+    }
 
-            localStorage.setItem('s7_comments', JSON.stringify(allComments));
-            document.getElementById('commentInputText').value = '';
-            renderComments(scriptId);
+    function chooserGo(type) {
+        const modal = document.getElementById('platform-chooser');
+        const platform = modal.dataset.platform;
+        const info = PLATFORM_INFO[platform];
+        if (!info) return;
+        closeChooser();
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll(".page-content").forEach(page => {
+            page.style.display = "none";
+        });
+        const target = document.getElementById(pageId);
+        if (target) {
+            target.style.display = "block";
         }
+        document.getElementById("menu").classList.remove("active");
+        document.querySelectorAll(".submenu.open").forEach(s => {
+            s.classList.remove("open");
+            s.parentElement.classList.remove("expanded");
+        });
+        closeChooser();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        async function toggleRating() {
-            playCyberSound('click');
-            requireAuth(async () => {
-                if (!currentScript) return;
-                const id = currentScript.id;
-                let currentRating = currentScript.rating || 0;
-                const rateBtn = document.getElementById('rateBtn');
+    document.addEventListener("DOMContentLoaded", function () {
+        showPage('home');
 
-                if (ratedScripts[id]) {
-                    currentRating = Math.max(0, currentRating - 1);
-                    delete ratedScripts[id];
-                    rateBtn.innerText = 'Rate (+1 Star)';
-                    rateBtn.style.borderColor = 'var(--border-color)';
-                    rateBtn.style.color = '#d8b4fe';
-                    alert('Rating removed successfully.');
-                } else {
-                    currentRating += 1;
-                    ratedScripts[id] = true;
-                    rateBtn.innerText = 'Unrate (-1 Star)';
-                    rateBtn.style.borderColor = '#ef4444';
-                    rateBtn.style.color = '#ef4444';
-                    alert('Rating added successfully.');
-                }
-
-                localStorage.setItem('s7_rated_scripts', JSON.stringify(ratedScripts));
-                await _supabase.from('scripts').update({ rating: currentRating }).eq('id', id);
-                currentScript.rating = currentRating;
-                
-                const isItemOwner = currentScript.owner === OWNER;
-                const isItemAdmin = starAdmins.includes(currentScript.owner);
-                const isItemDev = ourScriptDevs.includes(currentScript.owner);
-                const isItemVerified = isVerified(currentScript.owner);
-                document.getElementById('detailMeta').innerHTML = `Views: ${currentScript.views || 0} | Rating: ★ ${currentScript.rating || 0} | Owner: ${currentScript.owner} ${isItemVerified ? `<img src="${VERIFIED_BADGE_IMG}" class="badge-verified-img" title="Verified Account">` : ''} ${isItemOwner ? '<span class="badge-owner">OWNER</span>' : ''} ${isItemAdmin ? '<span class="badge-admin">ADMIN</span>' : ''} ${isItemDev ? '<span class="badge-devs">OUR DEV</span>' : ''}`;
-                
-                await fetchScripts();
-            });
-        }
-
-        function showUpload() {
-            playCyberSound('click');
-            if (isGuest) {
-                alert('Action restricted: Please sign in with GitHub to upload scripts.');
-                openLoginModalFromProfile();
-                return;
+        const shield = (e) => {
+            if (e.target.tagName === 'A' || e.target.closest('a') || 
+                e.target.tagName === 'LI' || e.target.closest('li') || 
+                e.target.closest('.feature-item')) {
+                return true;
             }
-            hideAllPages();
-            document.getElementById('uploadFormTitle').innerText = "Upload New Script";
-            document.getElementById('uploadSubmitBtn').innerText = "Upload";
-            document.getElementById('editScriptId').value = '';
-            document.getElementById('upTitle').value = '';
-            document.getElementById('upGameId').value = '';
-            document.getElementById('upImageUrl').value = '';
-            document.getElementById('upImageFile').value = '';
-            document.getElementById('imgPreviewContainer').innerHTML = '';
-            document.getElementById('upFeatures').value = '';
-            document.getElementById('upCode').value = '';
-            document.getElementById('upVisibility').value = 'public';
-            document.getElementById('uploadPage').style.display = 'block';
-        }
-
-        function openEditMode() {
-            playCyberSound('click');
-            if (!currentScript) return;
-            hideAllPages();
-            document.getElementById('uploadFormTitle').innerText = "Edit Script";
-            document.getElementById('uploadSubmitBtn').innerText = "Save Changes";
-            document.getElementById('editScriptId').value = currentScript.id;
-            document.getElementById('upTitle').value = currentScript.title;
-            document.getElementById('upGameId').value = currentScript.game_id || '';
-            document.getElementById('upImageUrl').value = currentScript.thumbnail || '';
-            document.getElementById('imgPreviewContainer').innerHTML = currentScript.thumbnail ? `<img src="${currentScript.thumbnail}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 8px;">` : '';
-            document.getElementById('upFeatures').value = currentScript.features;
-            document.getElementById('upCode').value = currentScript.script_code;
-            document.getElementById('upVisibility').value = currentScript.visibility || 'public';
-            document.getElementById('uploadPage').style.display = 'block';
-        }
-
-        async function handleUploadSubmit(e) {
             e.preventDefault();
-            playCyberSound('click');
-            if (isGuest) {
-                alert('Action restricted: Please sign in with GitHub.');
-                openLoginModalFromProfile();
-                return;
+            e.stopPropagation();
+            return false;
+        };
+
+        ['contextmenu', 'copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(event => {
+            document.addEventListener(event, shield, true);
+        });
+
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) e.preventDefault();
+        }, {passive: false});
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+                e.preventDefault();
             }
-            if (!currentUser) return;
-
-            const editId = document.getElementById('editScriptId').value;
-            const username = getCurrentUsername();
-
-            const scriptData = {
-                title: document.getElementById('upTitle').value,
-                game_id: document.getElementById('upGameId').value || 'Universal',
-                thumbnail: document.getElementById('upImageUrl').value || 'https://via.placeholder.com/300x160',
-                features: document.getElementById('upFeatures').value,
-                script_code: document.getElementById('upCode').value,
-                visibility: document.getElementById('upVisibility').value,
-                owner: editId ? currentScript.owner : username
-            };
-
-            if (editId) {
-                const { error } = await _supabase.from('scripts').update(scriptData).eq('id', editId);
-                if (!error) { alert('Script updated successfully.'); await fetchScripts(); showHome(); }
-            } else {
-                const { error } = await _supabase.from('scripts').insert([scriptData]);
-                if (!error) { alert('Script uploaded successfully.'); e.target.reset(); await fetchScripts(); showHome(); }
-            }
-        }
-
-        async function deleteCurrentScript() {
-            playCyberSound('click');
-            if (!currentScript) return;
-            if (!confirm('Are you sure you want to delete this script?')) return;
-
-            const { error } = await _supabase.from('scripts').delete().eq('id', currentScript.id);
-            if (!error) { alert('Script deleted successfully.'); await fetchScripts(); showHome(); }
-        }
-
-        function showProfile() {
-            playCyberSound('click');
-            hideAllPages();
-            document.getElementById('profilePage').style.display = 'block';
-            
-            const profileTitle = document.getElementById('profileTitle');
-            const profileSubText = document.getElementById('profileSubText');
-            const guestPrompt = document.getElementById('guestLoginPromptContainer');
-
-            if (currentUser) {
-                const username = getCurrentUsername();
-                profileTitle.innerText = `User Profile: ${username}`;
-                profileSubText.innerText = `Manage your scripts and account below:`;
-                guestPrompt.style.display = 'none';
-
-                if (isOwner()) {
-                    document.getElementById('ownerControlPanel').style.display = 'block';
-                    renderControlLists();
-                } else {
-                    document.getElementById('ownerControlPanel').style.display = 'none';
-                }
-                
-                const userScripts = (isOwner() || isStarAdmin()) ? allScripts : allScripts.filter(s => s.owner === username);
-                renderScripts(userScripts, 'userScriptGrid');
-            } else if (isGuest) {
-                profileTitle.innerText = `Guest Profile`;
-                profileSubText.innerText = `You are currently browsing as a Guest. Sign in with GitHub to enable script uploading and management.`;
-                guestPrompt.style.display = 'block';
-                document.getElementById('ownerControlPanel').style.display = 'none';
-                document.getElementById('userScriptGrid').innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:20px;">Sign in with GitHub to view your personal scripts.</div>';
-            } else {
-                profileTitle.innerText = `Guest Profile`;
-                profileSubText.innerText = `You are browsing as Guest.`;
-                guestPrompt.style.display = 'block';
-                document.getElementById('ownerControlPanel').style.display = 'none';
-                document.getElementById('userScriptGrid').innerHTML = '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:20px;">Please select an option to continue.</div>';
-            }
-        }
-
-        function openSidebar() { playCyberSound('click'); document.getElementById('sidebar').classList.add('active'); document.getElementById('overlay').classList.add('active'); }
-        function closeSidebar() { playCyberSound('click'); document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
-        function showHome() { 
-            playCyberSound('click'); 
-            hideAllPages(); 
-            document.getElementById('homePage').style.display = 'block'; 
-            document.getElementById('hubSectionTitle').innerText = "Community Scripts Hub";
-            fetchScripts(); 
-        }
-        function hideAllPages() { document.getElementById('homePage').style.display = 'none'; document.getElementById('detailPage').style.display = 'none'; document.getElementById('uploadPage').style.display = 'none'; document.getElementById('profilePage').style.display = 'none'; }
-        function copyScriptCode() { playCyberSound('click'); navigator.clipboard.writeText(currentScript.script_code); alert('Script code copied to clipboard.'); }
-    </script>
+            if (e.key === 'F12') e.preventDefault();
+        });
+    });
+</script>
 </body>
 </html>
