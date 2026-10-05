@@ -28,12 +28,10 @@ body{
     color:#ffffff;
     overflow-x:hidden;
     position:relative;
-    /* تعيين صورة الـ GIF كخلفية للموقع بالكامل */
     background: url("https://cdn.discordapp.com/attachments/1556721207519485993/1556728929086083082/d895c222e5fe92cb334de04e6d8f6828.gif?backend=b2&ex=6ac5384b&is=6ac3e6cb&hm=b272e7c94ef50dc9e8ba21891d865fcb3ce192d15e0c81f2729929760e14ee39&") no-repeat center center fixed;
     background-size: cover;
 }
 
-/* طبقة تظليل خفيفة لإبراز العناصر الزجاجية فوق خلفية الـ GIF */
 body::before {
     content: "";
     position: fixed;
@@ -43,7 +41,6 @@ body::before {
     z-index: -1;
 }
 
-/* القائمة الجانبية بستايل زجاج الآيفون iOS Drawer */
 .side-drawer {
     position: fixed;
     top: 0;
@@ -96,7 +93,6 @@ body::before {
     gap: 12px;
 }
 
-/* أزرار زجاجية ناعمة iOS */
 .ios-glass-nav {
     display: flex;
     align-items: center;
@@ -125,7 +121,6 @@ body::before {
     background: #ffffff;
 }
 
-/* الأشكال الهندسية */
 .geom-shape {
     width: 14px;
     height: 14px;
@@ -163,7 +158,6 @@ body::before {
     border-radius: 2px;
 }
 
-/* الهيدر العلوي */
 .header-wrapper {
     width: min(1200px, 92%);
     margin: 30px auto 0;
@@ -173,7 +167,6 @@ body::before {
     gap: 20px;
 }
 
-/* شريط الأزرار بستايل أبل الزجاجي iOS Bar */
 .ios-toolbar-top {
     display: flex;
     align-items: center;
@@ -230,7 +223,6 @@ body::before {
     margin: 0 4px;
 }
 
-/* قسم الاسم والشعار الزجاجي الساطع */
 .brand-section-header {
     display: flex;
     align-items: center;
@@ -265,13 +257,11 @@ body::before {
     text-shadow: 0 2px 12px rgba(239, 68, 68, 0.5);
 }
 
-/* المحتوى الرئيسي */
 .main-container{
     width: min(1200px, 92%);
     margin: 35px auto 60px;
 }
 
-/* شريط البحث الزجاجي */
 .search-wrapper {
     margin-bottom: 35px;
     display: flex;
@@ -316,7 +306,6 @@ body::before {
     transform: translateY(-50%);
 }
 
-/* كروت الإدارة الزجاجية iOS Cards */
 .team-card-section {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.22);
@@ -398,7 +387,6 @@ body::before {
     font-weight: 700;
 }
 
-/* نظام الصفحات المستقلة */
 .page-view {
     display: none;
 }
@@ -443,29 +431,114 @@ body::before {
     box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
 }
 
-.empty-container {
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px dashed rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-radius: 28px;
-    padding: 70px 20px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
 }
 
-.geom-icon-box {
-    width: 70px;
-    height: 70px;
-    border-radius: 22px;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.4);
+.item-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border-radius: 24px;
+    padding: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 18px;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+    flex-direction: column;
+    gap: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 20px 40px rgba(239, 68, 68, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.item-img {
+    width: 100%;
+    height: 170px;
+    border-radius: 18px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.item-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.code-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #fca5a5;
+    word-break: break-all;
+    user-select: all;
+    max-height: 90px;
+    overflow-y: auto;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(239, 68, 68, 0.85);
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.action-btn:hover {
+    background: #ef4444;
+    box-shadow: 0 12px 25px rgba(239, 68, 68, 0.5);
+    transform: translateY(-2px);
+}
+
+.action-btn.disabled {
+    background: rgba(100, 116, 139, 0.6);
+    border-color: rgba(255, 255, 255, 0.15);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.action-btn.disabled:hover {
+    transform: none;
+    background: rgba(100, 116, 139, 0.6);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.status-working {
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    color: #4ade80;
+}
+
+.status-stopped {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #f87171;
 }
 
 .footer {
@@ -482,7 +555,6 @@ body::before {
 
 <body>
 
-<!-- القائمة الجانبية (3 شخطات) -->
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="side-drawer" id="sideDrawer">
@@ -508,7 +580,6 @@ body::before {
     </div>
 </div>
 
-<!-- الهيدر العلوي بأزرار أبل iOS -->
 <header class="header-wrapper">
     
     <div class="ios-toolbar-top">
@@ -538,7 +609,6 @@ body::before {
         </button>
     </div>
 
-    <!-- اسم الموقع والشعار -->
     <div class="brand-section-header">
         <img class="brand-logo" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556729111962193990/Screenshot_2026-09-27-15-08-26-897_com.lemon.lvoverseas-edit-1-1.jpg?backend=b2&ex=6ac53876&is=6ac3e6f6&hm=00852f7f1b8fe6c94408d1fc5cd58b47dfd893c87c05a9f8a80f802e341c0397&" alt="S7 Logo">
         <div class="brand-name">S7 <span>SERVER</span></div>
@@ -551,7 +621,6 @@ body::before {
     <!-- الصفحة الرئيسية -->
     <div class="page-view active" id="homePage">
         
-        <!-- شريط البحث الزجاجي -->
         <div class="search-wrapper">
             <div class="search-field">
                 <input type="text" placeholder="ابحث في الموقع..." id="searchInput">
@@ -561,7 +630,6 @@ body::before {
             </div>
         </div>
 
-        <!-- قسم الإدارة العليا -->
         <div class="team-card-section">
             <div class="section-head">
                 <div class="geom-shape geom-rhombus"></div>
@@ -586,7 +654,6 @@ body::before {
             </div>
         </div>
 
-        <!-- قسم الكادر الإداري -->
         <div class="team-card-section">
             <div class="section-head">
                 <div class="geom-shape geom-square"></div>
@@ -621,12 +688,12 @@ body::before {
 
     </div>
 
-    <!-- صفحة الهاكات المستقلة -->
+    <!-- صفحة الهاكات -->
     <div class="page-view" id="hacksPage">
         <div class="page-header-nav">
             <div class="section-head" style="margin: 0;">
                 <div class="geom-shape geom-square"></div>
-                قسم الهاكات المخصص
+                قسم الهاكات
             </div>
             <button class="back-btn" onclick="navigateTo('home')">
                 <div class="geom-shape geom-circle" style="border-color: #ffffff;"></div>
@@ -634,21 +701,35 @@ body::before {
             </button>
         </div>
 
-        <div class="empty-container">
-            <div class="geom-icon-box">
-                <div class="geom-shape geom-square" style="width:22px; height:22px;"></div>
+        <div class="items-grid">
+            <!-- كارت هاك دلتا 740 -->
+            <div class="item-card">
+                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556749288388825190/633167a4df8ebf274f786e078b6d8b63.jpg?backend=b2&ex=6ac54b41&is=6ac3f9c1&hm=ce9bc2b3104e4d033cc62d663e54d30bb93a83ac225527700665cc1051ba30b2&" alt="هاك دلتا اخر اصدار 740 للجوال">
+                <div>
+                    <div class="item-title">هاك دلتا اخر اصدار 740 للجوال</div>
+                    <span class="status-badge status-working">يعمل بنجاح</span>
+                </div>
+                <a href="https://delta.filenetwork.vip/file/Delta-2.740.931.apk" target="_blank" class="action-btn">تحميل الهاك</a>
             </div>
-            <h3 style="font-size: 20px; font-weight:800; color:#ffffff; margin-bottom: 8px;">مساحة قسم الهاكات</h3>
-            <p style="font-size: 14px;">جاهز لاستقبال المحتوى الخاص بك.</p>
+
+            <!-- كارت هاك دلتا النسخة الفيتنامية -->
+            <div class="item-card">
+                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556749288388825190/633167a4df8ebf274f786e078b6d8b63.jpg?backend=b2&ex=6ac54b41&is=6ac3f9c1&hm=ce9bc2b3104e4d033cc62d663e54d30bb93a83ac225527700665cc1051ba30b2&" alt="هكر دلتا نسخه الفيتناميه vn">
+                <div>
+                    <div class="item-title">هكر دلتا نسخه الفيتناميه vn</div>
+                    <span class="status-badge status-stopped">غير شغال حالياً</span>
+                </div>
+                <button class="action-btn disabled" disabled>الرابط غير متاح</button>
+            </div>
         </div>
     </div>
 
-    <!-- صفحة السكربتات المستقلة -->
+    <!-- صفحة السكربتات -->
     <div class="page-view" id="scriptsPage">
         <div class="page-header-nav">
             <div class="section-head" style="margin: 0;">
                 <div class="geom-shape geom-rhombus"></div>
-                قسم السكربتات المخصص
+                قسم السكربتات
             </div>
             <button class="back-btn" onclick="navigateTo('home')">
                 <div class="geom-shape geom-circle" style="border-color: #ffffff;"></div>
@@ -656,12 +737,22 @@ body::before {
             </button>
         </div>
 
-        <div class="empty-container">
-            <div class="geom-icon-box">
-                <div class="geom-shape geom-rhombus" style="width:20px; height:20px;"></div>
+        <div class="items-grid">
+            <!-- كارت سكربت ماب بلوكس فروت -->
+            <div class="item-card">
+                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556748314391875614/797964bf359e7b7eae21924fc1789889.jpg?backend=b2&ex=6ac54a59&is=6ac3f8d9&hm=303543d0d9eab7dd9ef920927c54482838e5439ff82f752518009a7b765b567d&" alt="سكربت ماب بلوكس فروت">
+                <div class="item-title">سكربت ماب بلوكس فروت</div>
+                <div class="code-box" id="script1">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Navz/loader.luau"))()</div>
+                <button class="action-btn" onclick="copyCode('script1')">نسخ السكربت</button>
             </div>
-            <h3 style="font-size: 20px; font-weight:800; color:#ffffff; margin-bottom: 8px;">مساحة قسم السكربتات</h3>
-            <p style="font-size: 14px;">جاهز لاستقبال المحتوى الخاص بك.</p>
+
+            <!-- كارت سكربت ماب اطفاء الاشياء -->
+            <div class="item-card">
+                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556748804382793738/c625eaa8ff6fd8364219cf08315e2923.jpg?backend=b2&ex=6ac54acd&is=6ac3f94d&hm=06971be89d658826589bcd06cbac957154877b97f43d1a6e28201ddddf6a6c12&" alt="سكربت ماب اطفاء الاشياء">
+                <div class="item-title">سكربت ماب اطفاء الاشياء</div>
+                <div class="code-box" id="script2">loadstring(game:HttpGet("https://raw.githubusercontent.com/aljshjjj-afk/S7scriptERM/refs/heads/main/luaq_obfuscated.lua"))()</div>
+                <button class="action-btn" onclick="copyCode('script2')">نسخ السكربت</button>
+            </div>
         </div>
     </div>
 
@@ -721,6 +812,15 @@ function navigateTo(page) {
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyCode(elementId) {
+    const codeText = document.getElementById(elementId).innerText;
+    navigator.clipboard.writeText(codeText).then(() => {
+        alert('تم نسخ السكربت بنجاح!');
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
 }
 
 </script>
