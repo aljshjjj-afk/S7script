@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NXT SERVER</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+    font-family:'Cairo',sans-serif;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(239, 68, 68, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(185, 28, 28, 0.12), transparent 40%),
+        #030303;
+    animation:backgroundPulse 10s ease-in-out infinite;
+}
+
+.canvas-bg{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+}
+
+.header{
+    width:100%;
+    padding:30px 25px 10px;
+    display:flex;
+    justify-content:center;
+}
+
+.header-box{
+    width:min(1200px,100%);
+    padding:20px 30px;
+    border:1px solid rgba(239,68,68,.3);
+    border-radius:24px;
+    background:rgba(10,10,10,.75);
+    backdrop-filter:blur(25px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(239,68,68,.1);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:50px;
+    height:50px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#ef4444,#991b1b);
+    box-shadow:0 0 25px rgba(239,68,68,.5);
+}
+
+.logo i{
+    font-size:22px;
+}
+
+.brand{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:0.5px;
+}
+
+.brand span{
+    color:#ef4444;
+}
+
+.subtitle{
+    color:#9ca3af;
+    font-size:12px;
+    margin-top:1px;
+}
+
+.live-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#d1d5db;
+    font-size:13px;
+    background:rgba(255,255,255,0.04);
+    padding:8px 16px;
+    border-radius:50px;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.live-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#eab308;
+    box-shadow:0 0 12px #eab308;
+    animation:statusPulseYellow 1.5s ease-in-out infinite;
+}
+
+.main-container{
+    width:min(1200px,100%);
+    margin:auto;
+    padding:30px 25px 60px;
+}
+
+/* قسم فريق العمل والستوريات */
+.team-section{
+    background:rgba(12,12,12,0.8);
+    border:1px solid rgba(239,68,68,0.25);
+    border-radius:28px;
+    padding:25px;
+    margin-bottom:35px;
+    backdrop-filter:blur(20px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-right:4px solid #ef4444;
+    padding-right:12px;
+}
+
+.stories-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:20px;
+}
+
+.story-card{
+    background:rgba(20,20,20,0.6);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:22px;
+    padding:20px 15px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    transition:all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+    overflow:hidden;
+}
+
+.story-card:hover{
+    transform:translateY(-7px);
+    border-color:rgba(239,68,68,0.5);
+    background:rgba(25,25,25,0.8);
+    box-shadow:0 10px 25px rgba(239,68,68,0.15);
+}
+
+.avatar-ring{
+    position:relative;
+    width:84px;
+    height:84px;
+    border-radius:50%;
+    padding:3px;
+    background:linear-gradient(45deg, #ef4444, #7f1d1d, #f87171);
+    margin-bottom:12px;
+}
+
+.avatar-img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #0a0a0a;
+}
+
+.user-name{
+    font-size:16px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:2px;
+}
+
+.user-role{
+    font-size:12px;
+    color:#ef4444;
+    font-weight:700;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.stat{
+    padding:18px;
+    border-radius:20px;
+    border:1px solid rgba(239,68,68,.2);
+    background:rgba(12,12,12,.7);
+    backdrop-filter:blur(15px);
+    text-align:center;
+    transition:.35s;
+}
+
+.stat:hover{
+    transform:translateY(-3px);
+    border-color:#ef4444;
+}
+
+.stat-number{
+    font-size:26px;
+    font-weight:800;
+    color:#ef4444;
+}
+
+.stat-label{
+    color:#888;
+    font-size:12px;
+    margin-top:2px;
+}
+
+.search-box{
+    position:relative;
+    margin-bottom:30px;
+}
+
+.search-box input{
+    width:100%;
+    padding:16px 50px 16px 20px;
+    background:rgba(12,12,12,.75);
+    border:1px solid rgba(239,68,68,.25);
+    border-radius:18px;
+    color:white;
+    outline:none;
+    transition:.3s;
+    backdrop-filter:blur(15px);
+    font-family:inherit;
+}
+
+.search-box input:focus{
+    border-color:#ef4444;
+    box-shadow:0 0 20px rgba(239,68,68,.15);
+}
+
+.search-box i{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#ef4444;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+.card{
+    position:relative;
+    background:rgba(10,10,10,.85);
+    border-radius:26px;
+    overflow:hidden;
+    border:1px solid rgba(239,68,68,.25);
+    transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .35s, box-shadow .35s;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:#ef4444;
+    box-shadow:0 15px 40px rgba(239,68,68,.18);
+}
+
+.image-container{
+    height:210px;
+    position:relative;
+    overflow:hidden;
+    background:#080808;
+}
+
+.image-container::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.85));
+}
+
+.image-container img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .6s;
+}
+
+.card:hover .image-container img{
+    transform:scale(1.06);
+}
+
+.title{
+    position:absolute;
+    bottom:15px;
+    right:18px;
+    left:18px;
+    color:white;
+    font-size:19px;
+    font-weight:800;
+    z-index:3;
+    text-shadow:0 2px 10px rgba(0,0,0,0.8);
+}
+
+.status{
+    position:absolute;
+    left:15px;
+    top:15px;
+    z-index:4;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:6px 12px;
+    border-radius:30px;
+    background:rgba(0,0,0,.75);
+    border:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(8px);
+    font-size:11px;
+    font-weight:700;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+}
+
+.status.maintenance .status-dot{
+    background:#eab308;
+    box-shadow:0 0 10px #eab308;
+    animation:statusPulseYellow 1.4s ease-in-out infinite;
+}
+
+.status.maintenance{
+    color:#fde047;
+}
+
+.glass-panel{
+    padding:18px;
+    background:rgba(12,12,12,.95);
+}
+
+.description{
+    color:#9ca3af;
+    font-size:13px;
+    margin-bottom:15px;
+    min-height:38px;
+    line-height:1.6;
+}
+
+.red-btn{
+    width:100%;
+    padding:14px;
+    border-radius:15px;
+    background:rgba(255,255,255,.03);
+    border:1px solid #444;
+    color:#888;
+    font-weight:800;
+    cursor:not-allowed;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    font-family:inherit;
+    font-size:14px;
+}
+
+.no-results{
+    display:none;
+    text-align:center;
+    color:#777;
+    padding:50px 20px;
+    font-size:15px;
+}
+
+@keyframes backgroundPulse{
+    0%,100%{ opacity:.8; }
+    50%{ opacity:1; }
+}
+
+@keyframes statusPulseYellow{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.5); opacity:.6; }
+}
+
+@media(max-width:700px){
+    .header-box{ padding:15px; }
+    .brand{ font-size:20px; }
+    .stories-grid{ grid-template-columns:repeat(2, 1fr); }
+    .grid{ grid-template-columns:1fr; }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="bg-canvas" class="canvas-bg"></canvas>
+
+<div class="page">
+
+<header class="header">
+    <div class="header-box">
+        <div class="logo-area">
+            <div class="logo">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+                <div class="brand">NXT <span>SERVER</span></div>
+                <div class="subtitle">Roblox Scripts Hub</div>
+            </div>
+        </div>
+        <div class="live-box">
+            <div class="live-dot"></div>
+            تحت الصيانة
+        </div>
+    </div>
+</header>
+
+<main class="main-container">
+
+    <!-- قسم الإدارة العليا -->
+    <div class="team-section">
+        <div class="section-title">
+            <i class="fa-solid fa-crown text-red-500"></i>
+            الإدارة العليا
+        </div>
+        <div class="stories-grid">
+            <div class="story-card">
+                <div class="avatar-ring">
+                    <img class="avatar-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726148942274570/image-18.png?backend=b2&ex=6ac535b4&is=6ac3e434&hm=e819b5e9b480d1083d8ac62bfd3ff5f61d2788fbbba66ce5b01bb77c7577c682&" alt="محمد علي">
+                </div>
+                <div class="user-name">محمد علي</div>
+                <div class="user-role">( نوبيدو )</div>
+            </div>
+
+            <div class="story-card">
+                <div class="avatar-ring">
+                    <img class="avatar-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726406770196641/37f409f2c3646d744481e0f4a286eaef.png?backend=b2&ex=6ac535f1&is=6ac3e471&hm=ea57459bec8941a6111240425b0991340f39cb4c2eeb7fbe229fdcf07bcae0b3&" alt="كواري">
+                </div>
+                <div class="user-name">كواري</div>
+                <div class="user-role">Owner</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الكادر الإداري -->
+    <div class="team-section">
+        <div class="section-title">
+            <i class="fa-solid fa-users-gear text-red-500"></i>
+            الكادر الإداري
+        </div>
+        <div class="stories-grid">
+            <div class="story-card">
+                <div class="avatar-ring">
+                    <img class="avatar-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726633602228265/374bdd27daba2c0c579c954cebbffe2c.png?backend=b2&ex=6ac53628&is=6ac3e4a8&hm=1a4cf89d1b62ccea023119ae6acd527610a5dfdb8d7db5482f0527cb4e8c7663&" alt="حسين">
+                </div>
+                <div class="user-name">حسين</div>
+                <div class="user-role">إداري</div>
+            </div>
+
+            <div class="story-card">
+                <div class="avatar-ring">
+                    <img class="avatar-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726799927353454/d7255e3a25725e4a2baca65bb098bfaa.jpg?backend=b2&ex=6ac5364f&is=6ac3e4cf&hm=3e839ba9ed6427d869bd3f2d55e912faa83d698e1e06c79d71cbcc966ecaa0f1&" alt="فلينه">
+                </div>
+                <div class="user-name">فلينه</div>
+                <div class="user-role">إداري</div>
+            </div>
+
+            <div class="story-card">
+                <div class="avatar-ring">
+                    <img class="avatar-img" src="https://cdn.discordapp.com/attachments/1533943621080846387/1556727044304539679/f0b96fd037d78cd6bb6bb0ebac22f972.png?backend=b2&ex=6ac53689&is=6ac3e509&hm=5a87ed66f7f03b5e6627637b06bb310db75641ce3800019fdc895392e191d7a8&" alt="حسن">
+                </div>
+                <div class="user-name">حسن</div>
+                <div class="user-role">إداري</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات -->
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-number" id="total-count">0</div>
+            <div class="stat-label">إجمالي السكربتات</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number" id="online-count">0</div>
+            <div class="stat-label">شغال</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number" id="offline-count">0</div>
+            <div class="stat-label">صيانة</div>
+        </div>
+    </div>
+
+    <!-- مربع البحث -->
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search" placeholder="ابحث عن ماب أو سكربت..." autocomplete="off">
+    </div>
+
+    <!-- حاوية السكربتات -->
+    <div class="grid" id="cards-container"></div>
+
+    <div class="no-results" id="no-results">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size:35px;color:#ef4444;margin-bottom:15px;"></i>
+        <br>
+        لم يتم العثور على نتائج
+    </div>
+
+</main>
+
+</div>
+
+<script>
+
+// قائمة السكربتات المحدثة إلى حالة الصيانة
+const Cards_Config = [
+    {
+        image: "https://scriptblox.com/images/script/0-1756360667850.jpg",
+        title: "سكربت لجميع المابات الصمله",
+        description: "السكربت متوقف حالياً يخضع لعملية الصيانة والتطوير",
+        status: "maintenance"
+    },
+    {
+        image: "https://steal-an-egg-roblox.wiki/images/sidebar/phoenix-egg.png",
+        title: "ماب سرقة البيض",
+        description: "السكربت متوقف حالياً بسبب التحديثات والصيانة",
+        status: "maintenance"
+    },
+    {
+        image: "https://tr.rbxcdn.com/180DAY-08a25a940403897c8f9a85a6f179b57e/768/432/Image/Webp/noFilter",
+        title: "سكربت عسكرية بلاتنيوم",
+        description: "السكربت تحت الصيانة وسيتم إتاحته فور الانتهاء",
+        status: "maintenance"
+    }
+];
+
+function createCard(data){
+    return `
+    <div class="card" data-title="${data.title.toLowerCase()}">
+        <div class="image-container">
+            <div class="status maintenance">
+                <div class="status-dot"></div>
+                <span>صيانة</span>
+            </div>
+            <img src="${data.image}" onerror="this.style.opacity='0'">
+            <div class="title">${data.title}</div>
+        </div>
+        <div class="glass-panel">
+            <div class="description">${data.description}</div>
+            <button class="red-btn" disabled>
+                <i class="fa-solid fa-wrench"></i>
+                <span>صيانة</span>
+            </button>
+        </div>
+    </div>
+    `;
+}
+
+const container = document.getElementById("cards-container");
+container.innerHTML = Cards_Config.map(createCard).join("");
+
+document.getElementById("total-count").innerText = Cards_Config.length;
+document.getElementById("online-count").innerText = 0;
+document.getElementById("offline-count").innerText = Cards_Config.length;
+
+// بحث
+const search = document.getElementById("search");
+const noResults = document.getElementById("no-results");
+
+search.addEventListener("input", function(){
+    const value = this.value.toLowerCase().trim();
+    const cards = document.querySelectorAll("#cards-container .card");
+    let found = 0;
+
+    cards.forEach((card) => {
+        const title = card.dataset.title || "";
+        if(value === "" || title.includes(value)){
+            card.style.display = "block";
+            found++;
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    if(value !== "" && found === 0){
+        noResults.style.display = "block";
+    } else {
+        noResults.style.display = "none";
+    }
+});
+
+// خلفية الجسيمات المتحركة
+const canvas = document.getElementById("bg-canvas");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let particles = [];
+function createParticles(){
+    particles = [];
+    const amount = Math.min(120, Math.floor((window.innerWidth * window.innerHeight) / 12000));
+    for(let i = 0; i < amount; i++){
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.5,
+            speed: Math.random() * 0.5 + 0.2,
+            opacity: Math.random() * 0.5 + 0.2,
+            drift: (Math.random() - 0.5) * 0.2
+        });
+    }
+}
+createParticles();
+window.addEventListener("resize", createParticles);
+
+function animate(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        p.y += p.speed;
+        p.x += p.drift;
+
+        if(p.y > canvas.height){ p.y = -10; p.x = Math.random() * canvas.width; }
+        if(p.x > canvas.width) p.x = 0;
+        if(p.x < 0) p.x = canvas.width;
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(239, 68, 68, ${p.opacity})`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = "#ef4444";
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+
+</script>
+
+</body>
+</html>
