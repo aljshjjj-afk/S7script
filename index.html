@@ -701,26 +701,8 @@ body::before {
             </button>
         </div>
 
-        <div class="items-grid">
-            <!-- كارت هاك دلتا 740 -->
-            <div class="item-card">
-                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556749288388825190/633167a4df8ebf274f786e078b6d8b63.jpg?backend=b2&ex=6ac54b41&is=6ac3f9c1&hm=ce9bc2b3104e4d033cc62d663e54d30bb93a83ac225527700665cc1051ba30b2&" alt="هاك دلتا اخر اصدار 740 للجوال">
-                <div>
-                    <div class="item-title">هاك دلتا اخر اصدار 740 للجوال</div>
-                    <span class="status-badge status-working">يعمل بنجاح</span>
-                </div>
-                <a href="https://delta.filenetwork.vip/file/Delta-2.740.931.apk" target="_blank" class="action-btn">تحميل الهاك</a>
-            </div>
-
-            <!-- كارت هاك دلتا النسخة الفيتنامية -->
-            <div class="item-card">
-                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556749288388825190/633167a4df8ebf274f786e078b6d8b63.jpg?backend=b2&ex=6ac54b41&is=6ac3f9c1&hm=ce9bc2b3104e4d033cc62d663e54d30bb93a83ac225527700665cc1051ba30b2&" alt="هكر دلتا نسخه الفيتناميه vn">
-                <div>
-                    <div class="item-title">هكر دلتا نسخه الفيتناميه vn</div>
-                    <span class="status-badge status-stopped">غير شغال حالياً</span>
-                </div>
-                <button class="action-btn disabled" disabled>الرابط غير متاح</button>
-            </div>
+        <div class="items-grid" id="hacksGrid">
+            <!-- سيتم تعبئة الهاكات تلقائياً من الـ API هنا -->
         </div>
     </div>
 
@@ -822,6 +804,39 @@ function copyCode(elementId) {
         console.error('Failed to copy: ', err);
     });
 }
+
+// دالة جلب الهاكات وعرضها ديناميكياً من الـ API
+async function fetchHacks() {
+    try {
+        const response = await fetch('https://delta.filenetwork.vip/get_files.php');
+        const data = await response.json();
+        
+        const hacksGrid = document.getElementById('hacksGrid');
+        hacksGrid.innerHTML = ''; 
+
+        data.forEach(hack => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            
+            card.innerHTML = `
+                <img class="item-img" src="${hack.image || 'https://via.placeholder.com/300'}" alt="${hack.title || 'هاك'}">
+                <div>
+                    <div class="item-title">${hack.title || 'بدون عنوان'}</div>
+                    <span class="status-badge status-working">يعمل بنجاح</span>
+                </div>
+                <a href="${hack.link || '#'}" target="_blank" class="action-btn">تحميل الهاك</a>
+            `;
+            
+            hacksGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('حدث خطأ أثناء جلب الهاكات:', error);
+        document.getElementById('hacksGrid').innerHTML = '<p style="text-align: center; color: #fca5a5; grid-column: 1/-1;">فشل في تحميل الهاكات من الخادم.</p>';
+    }
+}
+
+// تشغيل دالة الجلب عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', fetchHacks);
 
 </script>
 
