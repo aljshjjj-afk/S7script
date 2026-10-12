@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S7 SERVER</title>
+<title>S7 SERVER - تحت الصيانة</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -18,16 +18,15 @@
     font-family: 'Readex Pro', sans-serif;
 }
 
-html{
-    scroll-behavior:smooth;
-}
-
 body{
     margin:0;
     min-height:100vh;
     color:#ffffff;
-    overflow-x:hidden;
-    position:relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
     background: url("https://cdn.discordapp.com/attachments/1556721207519485993/1556728929086083082/d895c222e5fe92cb334de04e6d8f6828.gif?backend=b2&ex=6ac5384b&is=6ac3e6cb&hm=b272e7c94ef50dc9e8ba21891d865fcb3ce192d15e0c81f2729929760e14ee39&") no-repeat center center fixed;
     background-size: cover;
 }
@@ -36,217 +35,38 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.45);
+    background: rgba(15, 23, 42, 0.65);
     pointer-events: none;
     z-index: -1;
 }
 
-.side-drawer {
-    position: fixed;
-    top: 0;
-    right: -330px;
-    width: 310px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.15);
+.maintenance-card {
+    width: min(480px, 90%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     backdrop-filter: blur(30px) saturate(190%);
     -webkit-backdrop-filter: blur(30px) saturate(190%);
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    padding: 30px 22px;
-}
-
-.side-drawer.active {
-    right: 0;
-}
-
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-}
-
-.overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.drawer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    margin-bottom: 25px;
-}
-
-.drawer-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ios-glass-nav {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 20px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #ffffff;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
-}
-
-.ios-glass-nav:hover, .ios-glass-nav.active {
-    background: rgba(239, 68, 68, 0.85);
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
-    transform: translateY(-2px);
-}
-
-.ios-glass-nav:hover .geom-shape, .ios-glass-nav.active .geom-shape {
-    border-color: #ffffff;
-    background: #ffffff;
-}
-
-.geom-shape {
-    width: 14px;
-    height: 14px;
-    border: 2px solid #ef4444;
-    transition: all 0.3s;
-    flex-shrink: 0;
-}
-
-.geom-square {
-    border-radius: 4px;
-}
-
-.geom-rhombus {
-    transform: rotate(45deg);
-    border-radius: 3px;
-}
-
-.geom-circle {
-    border-radius: 50%;
-}
-
-.geom-lines {
-    width: 18px;
-    height: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.geom-lines span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: #ffffff;
-    border-radius: 2px;
-}
-
-.header-wrapper {
-    width: min(1200px, 92%);
-    margin: 30px auto 0;
+    border-radius: 32px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
 }
 
-.ios-toolbar-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    padding: 8px 16px;
-    border-radius: 26px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3);
-}
-
-.ios-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    padding: 10px 22px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
-}
-
-.ios-btn:hover, .ios-btn.active {
-    background: rgba(239, 68, 68, 0.85);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-}
-
-.ios-btn:hover .geom-shape, .ios-btn.active .geom-shape {
-    border-color: #ffffff;
-    background: #ffffff;
-}
-
-.ios-btn-icon {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    justify-content: center;
-    border-radius: 16px;
-}
-
-.ios-divider {
-    width: 1px;
-    height: 22px;
-    background: rgba(255, 255, 255, 0.25);
-    margin: 0 4px;
-}
-
-.brand-section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    padding: 12px 30px;
-    border-radius: 26px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.3);
-}
-
 .brand-logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 16px;
+    width: 80px;
+    height: 80px;
+    border-radius: 22px;
     object-fit: cover;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
 }
 
 .brand-name {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
@@ -257,295 +77,41 @@ body::before {
     text-shadow: 0 2px 12px rgba(239, 68, 68, 0.5);
 }
 
-.main-container{
-    width: min(1200px, 92%);
-    margin: 35px auto 60px;
-}
-
-.search-wrapper {
-    margin-bottom: 35px;
-    display: flex;
-    justify-content: center;
-}
-
-.search-field {
-    width: min(600px, 100%);
-    position: relative;
-}
-
-.search-field input {
-    width: 100%;
-    padding: 18px 24px 18px 55px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-radius: 22px;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 600;
-    outline: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    transition: all 0.3s;
-}
-
-.search-field input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.search-field input:focus {
-    border-color: rgba(239, 68, 68, 0.8);
-    background: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 12px 35px rgba(239, 68, 68, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-}
-
-.search-geom-icon {
-    position: absolute;
-    left: 22px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.team-card-section {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-radius: 28px;
-    padding: 28px;
-    margin-bottom: 30px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.3);
-}
-
-.section-head {
-    font-size: 18px;
+.maintenance-title {
+    font-size: 22px;
     font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-right: 4px solid #ef4444;
-    padding-right: 14px;
-}
-
-.team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 20px;
-}
-
-.user-box {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 22px;
-    padding: 20px 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
-}
-
-.user-box:hover {
-    transform: translateY(-6px);
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(239, 68, 68, 0.6);
-    box-shadow: 0 15px 30px rgba(239, 68, 68, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-}
-
-.avatar-frame {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    padding: 3px;
-    background: linear-gradient(135deg, #ef4444, #f87171);
-    margin-bottom: 12px;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
-}
-
-.avatar-frame img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ffffff;
-}
-
-.user-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #ffffff;
-}
-
-.user-sub {
-    font-size: 12px;
-    color: #fca5a5;
-    font-weight: 700;
-}
-
-.page-view {
-    display: none;
-}
-
-.page-view.active {
-    display: block;
-}
-
-.page-header-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    padding: 18px 26px;
-    border-radius: 24px;
-    margin-bottom: 25px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-}
-
-.back-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    padding: 10px 22px;
-    border-radius: 16px;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
-}
-
-.back-btn:hover {
-    background: #ef4444;
-    border-color: #ef4444;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-}
-
-.items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 22px;
-}
-
-.item-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-radius: 24px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    transition: all 0.3s ease;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-}
-
-.item-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(239, 68, 68, 0.6);
-    box-shadow: 0 20px 40px rgba(239, 68, 68, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-}
-
-.item-img {
-    width: 100%;
-    height: 170px;
-    border-radius: 18px;
-    object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.item-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: #ffffff;
-}
-
-.code-box {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 14px;
-    padding: 12px;
-    font-family: monospace;
-    font-size: 12px;
-    color: #fca5a5;
-    word-break: break-all;
-    user-select: all;
-    max-height: 90px;
-    overflow-y: auto;
-}
-
-.action-btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 16px;
-    font-weight: 800;
-    font-size: 14px;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(239, 68, 68, 0.85);
-    color: #ffffff;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-}
-
-.action-btn:hover {
-    background: #ef4444;
-    box-shadow: 0 12px 25px rgba(239, 68, 68, 0.5);
-    transform: translateY(-2px);
-}
-
-.action-btn.disabled {
-    background: rgba(100, 116, 139, 0.6);
-    border-color: rgba(255, 255, 255, 0.15);
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-.action-btn.disabled:hover {
-    transform: none;
-    background: rgba(100, 116, 139, 0.6);
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    margin-top: 4px;
-}
-
-.status-working {
-    background: rgba(34, 197, 94, 0.2);
-    border: 1px solid rgba(34, 197, 94, 0.5);
-    color: #4ade80;
-}
-
-.status-stopped {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.5);
     color: #f87171;
+    margin-top: 5px;
+}
+
+.maintenance-desc {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.geom-shape {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #ef4444;
+    background: #ef4444;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ef4444;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
 }
 
 .footer {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    margin-top: 50px;
+    position: absolute;
+    bottom: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
     font-weight: 600;
 }
 
@@ -555,290 +121,23 @@ body::before {
 
 <body>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-<div class="side-drawer" id="sideDrawer">
-    <div class="drawer-header">
-        <div class="brand-name" style="font-size: 18px;">القائمة <span>الرئيسية</span></div>
-        <button class="ios-btn ios-btn-icon" onclick="toggleMenu()">
-            <div class="geom-shape geom-rhombus"></div>
-        </button>
-    </div>
-    <div class="drawer-menu">
-        <div class="ios-glass-nav active" id="drawerHomeBtn" onclick="navigateTo('home')">
-            <div class="geom-shape geom-circle"></div>
-            الصفحة الرئيسية
-        </div>
-        <div class="ios-glass-nav" id="drawerHackBtn" onclick="navigateTo('hacks')">
-            <div class="geom-shape geom-square"></div>
-            قسم الهاكات
-        </div>
-        <div class="ios-glass-nav" id="drawerScriptBtn" onclick="navigateTo('scripts')">
-            <div class="geom-shape geom-rhombus"></div>
-            قسم السكربتات
-        </div>
+<div class="maintenance-card">
+    <img class="brand-logo" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556729111962193990/Screenshot_2026-09-27-15-08-26-897_com.lemon.lvoverseas-edit-1-1.jpg?backend=b2&ex=6ac53876&is=6ac3e6f6&hm=00852f7f1b8fe6c94408d1fc5cd58b47dfd893c87c05a9f8a80f802e341c0397&" alt="S7 Logo">
+    
+    <div class="brand-name">S7 <span>SERVER</span></div>
+    
+    <div class="geom-shape"></div>
+    
+    <div class="maintenance-title">الموقع تحت الصيانة حالياً</div>
+    
+    <div class="maintenance-desc">
+        نعمل على تحديث وتطوير السيرفر وإضافة مميزات جديدة لتقديم أفضل تجربة لكم. يرجى العودة قريباً!
     </div>
 </div>
 
-<header class="header-wrapper">
-    
-    <div class="ios-toolbar-top">
-        <button class="ios-btn ios-btn-icon" title="القائمة الجانبية" onclick="toggleMenu()">
-            <div class="geom-lines">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </button>
-        
-        <div class="ios-divider"></div>
-
-        <button class="ios-btn active" id="barHomeBtn" onclick="navigateTo('home')">
-            <div class="geom-shape geom-circle"></div>
-            الرئيسية
-        </button>
-
-        <button class="ios-btn" id="barHackBtn" onclick="navigateTo('hacks')">
-            <div class="geom-shape geom-square"></div>
-            قسم الهاكات
-        </button>
-        
-        <button class="ios-btn" id="barScriptBtn" onclick="navigateTo('scripts')">
-            <div class="geom-shape geom-rhombus"></div>
-            قسم السكربتات
-        </button>
-    </div>
-
-    <div class="brand-section-header">
-        <img class="brand-logo" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556729111962193990/Screenshot_2026-09-27-15-08-26-897_com.lemon.lvoverseas-edit-1-1.jpg?backend=b2&ex=6ac53876&is=6ac3e6f6&hm=00852f7f1b8fe6c94408d1fc5cd58b47dfd893c87c05a9f8a80f802e341c0397&" alt="S7 Logo">
-        <div class="brand-name">S7 <span>SERVER</span></div>
-    </div>
-
-</header>
-
-<main class="main-container">
-
-    <!-- الصفحة الرئيسية -->
-    <div class="page-view active" id="homePage">
-        
-        <div class="search-wrapper">
-            <div class="search-field">
-                <input type="text" placeholder="ابحث في الموقع..." id="searchInput">
-                <div class="search-geom-icon">
-                    <div class="geom-shape geom-rhombus"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="team-card-section">
-            <div class="section-head">
-                <div class="geom-shape geom-rhombus"></div>
-                الإدارة العليا
-            </div>
-            <div class="team-grid">
-                <div class="user-box">
-                    <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726148942274570/image-18.png?backend=b2&ex=6ac535b4&is=6ac3e434&hm=e819b5e9b480d1083d8ac62bfd3ff5f61d2788fbbba66ce5b01bb77c7577c682&" alt="محمد علي">
-                    </div>
-                    <div class="user-title">محمد علي</div>
-                    <div class="user-sub">( نوبيدو )</div>
-                </div>
-
-                <div class="user-box">
-                    <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726406770196641/37f409f2c3646d744481e0f4a286eaef.png?backend=b2&ex=6ac535f1&is=6ac3e471&hm=ea57459bec8941a6111240425b0991340f39cb4c2eeb7fbe229fdcf07bcae0b3&" alt="كواري">
-                    </div>
-                    <div class="user-title">كواري</div>
-                    <div class="user-sub">Owner</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="team-card-section">
-            <div class="section-head">
-                <div class="geom-shape geom-square"></div>
-                الكادر الإداري
-            </div>
-            <div class="team-grid">
-                <div class="user-box">
-                    <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726633602228265/374bdd27daba2c0c579c954cebbffe2c.png?backend=b2&ex=6ac53628&is=6ac3e4a8&hm=1a4cf89d1b62ccea023119ae6acd527610a5dfdb8d7db5482f0527cb4e8c7663&" alt="حسين">
-                    </div>
-                    <div class="user-title">حسين</div>
-                    <div class="user-sub">إداري</div>
-                </div>
-
-                <div class="user-box">
-                    <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1556721207519485993/1556726799927353454/d7255e3a25725e4a2baca65bb098bfaa.jpg?backend=b2&ex=6ac5364f&is=6ac3e4cf&hm=3e839ba9ed6427d869bd3f2d55e912faa83d698e1e06c79d71cbcc966ecaa0f1&" alt="فلينه">
-                    </div>
-                    <div class="user-title">فلينه</div>
-                    <div class="user-sub">إداري</div>
-                </div>
-
-                <div class="user-box">
-                    <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1533943621080846387/1556727044304539679/f0b96fd037d78cd6bb6bb0ebac22f972.png?backend=b2&ex=6ac53689&is=6ac3e509&hm=5a87ed66f7f03b5e6627637b06bb310db75641ce3800019fdc895392e191d7a8&" alt="حسن">
-                    </div>
-                    <div class="user-title">حسن</div>
-                    <div class="user-sub">إداري</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- صفحة الهاكات -->
-    <div class="page-view" id="hacksPage">
-        <div class="page-header-nav">
-            <div class="section-head" style="margin: 0;">
-                <div class="geom-shape geom-square"></div>
-                قسم الهاكات
-            </div>
-            <button class="back-btn" onclick="navigateTo('home')">
-                <div class="geom-shape geom-circle" style="border-color: #ffffff;"></div>
-                الرجوع للرئيسية
-            </button>
-        </div>
-
-        <div class="items-grid" id="hacksGrid">
-            <!-- سيتم تعبئة الهاكات تلقائياً من الـ API هنا -->
-        </div>
-    </div>
-
-    <!-- صفحة السكربتات -->
-    <div class="page-view" id="scriptsPage">
-        <div class="page-header-nav">
-            <div class="section-head" style="margin: 0;">
-                <div class="geom-shape geom-rhombus"></div>
-                قسم السكربتات
-            </div>
-            <button class="back-btn" onclick="navigateTo('home')">
-                <div class="geom-shape geom-circle" style="border-color: #ffffff;"></div>
-                الرجوع للرئيسية
-            </button>
-        </div>
-
-        <div class="items-grid">
-            <!-- كارت سكربت ماب بلوكس فروت -->
-            <div class="item-card">
-                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556748314391875614/797964bf359e7b7eae21924fc1789889.jpg?backend=b2&ex=6ac54a59&is=6ac3f8d9&hm=303543d0d9eab7dd9ef920927c54482838e5439ff82f752518009a7b765b567d&" alt="سكربت ماب بلوكس فروت">
-                <div class="item-title">سكربت ماب بلوكس فروت</div>
-                <div class="code-box" id="script1">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Navz/loader.luau"))()</div>
-                <button class="action-btn" onclick="copyCode('script1')">نسخ السكربت</button>
-            </div>
-
-            <!-- كارت سكربت ماب اطفاء الاشياء -->
-            <div class="item-card">
-                <img class="item-img" src="https://cdn.discordapp.com/attachments/1556721207519485993/1556748804382793738/c625eaa8ff6fd8364219cf08315e2923.jpg?backend=b2&ex=6ac54acd&is=6ac3f94d&hm=06971be89d658826589bcd06cbac957154877b97f43d1a6e28201ddddf6a6c12&" alt="سكربت ماب اطفاء الاشياء">
-                <div class="item-title">سكربت ماب اطفاء الاشياء</div>
-                <div class="code-box" id="script2">loadstring(game:HttpGet("https://raw.githubusercontent.com/aljshjjj-afk/S7scriptERM/refs/heads/main/luaq_obfuscated.lua"))()</div>
-                <button class="action-btn" onclick="copyCode('script2')">نسخ السكربت</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        S7 SERVER © 2026
-    </div>
-
-</main>
-
-<script>
-
-function toggleMenu() {
-    const drawer = document.getElementById('sideDrawer');
-    const overlay = document.getElementById('overlay');
-    drawer.classList.toggle('active');
-    overlay.classList.toggle('active');
-}
-
-function navigateTo(page) {
-    const homeP = document.getElementById('homePage');
-    const hacksP = document.getElementById('hacksPage');
-    const scriptsP = document.getElementById('scriptsPage');
-
-    const barHome = document.getElementById('barHomeBtn');
-    const barHack = document.getElementById('barHackBtn');
-    const barScript = document.getElementById('barScriptBtn');
-
-    const drawerHome = document.getElementById('drawerHomeBtn');
-    const drawerHack = document.getElementById('drawerHackBtn');
-    const drawerScript = document.getElementById('drawerScriptBtn');
-
-    homeP.classList.remove('active');
-    hacksP.classList.remove('active');
-    scriptsP.classList.remove('active');
-
-    [barHome, barHack, barScript, drawerHome, drawerHack, drawerScript].forEach(btn => {
-        if(btn) btn.classList.remove('active');
-    });
-
-    if(page === 'home') {
-        homeP.classList.add('active');
-        barHome.classList.add('active');
-        drawerHome.classList.add('active');
-    } else if(page === 'hacks') {
-        hacksP.classList.add('active');
-        barHack.classList.add('active');
-        drawerHack.classList.add('active');
-    } else if(page === 'scripts') {
-        scriptsP.classList.add('active');
-        barScript.classList.add('active');
-        drawerScript.classList.add('active');
-    }
-
-    const drawer = document.getElementById('sideDrawer');
-    if(drawer.classList.contains('active')) {
-        toggleMenu();
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function copyCode(elementId) {
-    const codeText = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(codeText).then(() => {
-        alert('تم نسخ السكربت بنجاح!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-}
-
-// دالة جلب الهاكات وعرضها ديناميكياً من الـ API
-async function fetchHacks() {
-    try {
-        const response = await fetch('https://delta.filenetwork.vip/get_files.php');
-        const data = await response.json();
-        
-        const hacksGrid = document.getElementById('hacksGrid');
-        hacksGrid.innerHTML = ''; 
-
-        data.forEach(hack => {
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            
-            card.innerHTML = `
-                <img class="item-img" src="${hack.image || 'https://via.placeholder.com/300'}" alt="${hack.title || 'هاك'}">
-                <div>
-                    <div class="item-title">${hack.title || 'بدون عنوان'}</div>
-                    <span class="status-badge status-working">يعمل بنجاح</span>
-                </div>
-                <a href="${hack.link || '#'}" target="_blank" class="action-btn">تحميل الهاك</a>
-            `;
-            
-            hacksGrid.appendChild(card);
-        });
-    } catch (error) {
-        console.error('حدث خطأ أثناء جلب الهاكات:', error);
-        document.getElementById('hacksGrid').innerHTML = '<p style="text-align: center; color: #fca5a5; grid-column: 1/-1;">فشل في تحميل الهاكات من الخادم.</p>';
-    }
-}
-
-// تشغيل دالة الجلب عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', fetchHacks);
-
-</script>
+<div class="footer">
+    S7 SERVER © 2026 - All Rights Reserved
+</div>
 
 </body>
 </html>
