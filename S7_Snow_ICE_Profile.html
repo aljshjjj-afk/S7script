@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7fbff">
+<title>S7 Snow × ICE ❄️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--ink:#172333;--muted:#738398;--ice:#dff4ff;--blue:#82cfff;--line:rgba(122,164,196,.2);--glass:rgba(255,255,255,.74)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Changa,Inter,sans-serif;background:radial-gradient(ellipse at 12% 8%,#fff 0,transparent 34%),radial-gradient(ellipse at 88% 24%,#dff4ff 0,transparent 36%),linear-gradient(135deg,#f8fcff,#eaf6ff 55%,#f9fcff);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;background-image:radial-gradient(#8bbbd9 .8px,transparent .8px);background-size:17px 17px;z-index:-1}
+body:after{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:1;opacity:.55;background:radial-gradient(ellipse at 15% 78%,rgba(255,255,255,.92),transparent 35%),radial-gradient(ellipse at 78% 20%,rgba(211,241,255,.8),transparent 38%),radial-gradient(ellipse at 55% 95%,rgba(255,255,255,.9),transparent 32%);filter:blur(35px);animation:iceGlow 18s ease-in-out infinite alternate}
+@keyframes iceGlow{from{transform:translate3d(-2%,1%,0) scale(1)}to{transform:translate3d(2%,-2%,0) scale(1.08)}}
+.fog{position:fixed;inset:-15%;z-index:9;pointer-events:none;overflow:hidden;opacity:.72}
+.fog-layer{position:absolute;left:-35%;width:170%;height:42%;border-radius:50%;filter:blur(38px);background:radial-gradient(ellipse,rgba(255,255,255,.68) 0%,rgba(225,245,255,.35) 42%,transparent 72%);animation:fogDrift linear infinite}
+.fog-layer.one{top:12%;animation-duration:44s}
+.fog-layer.two{top:48%;height:35%;opacity:.72;animation-duration:58s;animation-direction:reverse}
+.fog-layer.three{top:77%;height:34%;opacity:.8;animation-duration:51s}
+@keyframes fogDrift{from{transform:translateX(-12%) translateY(0) scale(1)}50%{transform:translateX(12%) translateY(-4%) scale(1.13)}to{transform:translateX(-12%) translateY(0) scale(1)}}
+.snowbank{position:fixed;bottom:-70px;left:-5%;width:110%;height:145px;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 20% 100%,#fff 0 40%,transparent 72%),radial-gradient(ellipse at 75% 110%,#f4fbff 0 43%,transparent 75%);filter:blur(9px);opacity:.86}
+.snow{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+.flake{position:absolute;top:-12vh;color:#fff;text-shadow:0 0 8px #80cfff,0 0 18px #fff;animation:fall linear infinite;opacity:.9}
+@keyframes fall{to{transform:translate3d(var(--drift),115vh,0) rotate(540deg)}}
+.flake{will-change:transform;filter:drop-shadow(0 0 5px rgba(110,190,245,.75))}
+.flake.big{filter:blur(.25px) drop-shadow(0 0 8px rgba(255,255,255,.95))}
+.wrap{width:min(920px,calc(100% - 30px));margin:42px auto 70px;position:relative;z-index:5}
+.topbar{display:none}
+.brand{display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:#7bcaff;box-shadow:0 0 14px #73c9ff}
+.card{background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:27px;box-shadow:0 24px 70px rgba(83,137,174,.13),inset 0 1px 0 #fff;backdrop-filter:blur(18px);overflow:hidden}
+.banner{height:230px;position:relative;background:#dceefa;overflow:hidden}
+.banner img{width:100%;height:100%;object-fit:cover;display:block}
+.banner:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(19,57,82,.13))}
+.banner-tag{display:none}
+.profile{padding:0 34px 30px}
+.identity{display:flex;align-items:end;gap:19px;margin-top:-58px;position:relative;z-index:2}
+.avatar-wrap{width:116px;height:116px;border-radius:32px;padding:5px;background:linear-gradient(145deg,#fff,#8bd4ff);box-shadow:0 12px 30px #6baedc45;flex:none}
+.avatar{width:100%;height:100%;border-radius:28px;object-fit:cover;border:3px solid #fff}
+.nameblock{padding-bottom:8px;min-width:0}
+.name{font:800 clamp(22px,4vw,32px) Inter,Changa,sans-serif;letter-spacing:-1.2px;margin:0;color:#182c40}
+.name span{color:#62b8ed}.handle{direction:ltr;text-align:right;color:#7b91a5;font:600 13px Inter;margin-top:7px}
+.status{display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:6px 11px;border-radius:30px;background:#e8f6ff;color:#5486a8;font:700 10px Inter;letter-spacing:1px}
+.status i{width:7px;height:7px;border-radius:50%;background:#69c99c;box-shadow:0 0 8px #69c99c}
+.actions{display:flex;gap:9px;margin-right:auto;padding-bottom:9px}
+.action{border:1px solid var(--line);background:#fff;color:#52718b;padding:10px 13px;border-radius:13px;text-decoration:none;font:700 11px Inter;cursor:pointer;transition:.2s}
+.action:hover{transform:translateY(-3px);box-shadow:0 8px 20px #8bc9ef30}
+.bio{margin-top:28px;padding:20px 22px;border:1px solid var(--line);border-radius:19px;background:linear-gradient(120deg,#ffffffc9,#f1f9ffb8)}
+.section-title{font:800 11px Inter,sans-serif;letter-spacing:2px;color:#85a1b8;margin:0 0 14px;direction:ltr;text-align:left}
+.bio-line{font-size:14px;color:#435a70;line-height:2.15}
+.bio-line strong{color:#1d3b54;font-weight:800}
+.spoiler{display:inline-block;direction:ltr;background:#dce8f1;color:transparent;text-shadow:0 0 7px #536b80;filter:blur(3px);border-radius:5px;padding:0 7px;cursor:pointer;transition:.18s;user-select:none}
+.spoiler.reveal{color:#31536e;text-shadow:none;filter:none;background:#e3f4ff}
+.badges{margin-top:26px}
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.badge{aspect-ratio:1.05;display:flex;align-items:center;justify-content:center;border-radius:20px;background:#f0faff;border:1px solid #e8f6ff;box-shadow:inset 0 1px 0 #fff,0 8px 22px rgba(91,142,176,.08);transition:.22s;position:relative;overflow:hidden;padding:22px}
+.badge svg{width:min(72%,92px);height:auto;filter:drop-shadow(0 3px 3px rgba(60,100,130,.12))}
+.badge:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#fff7,transparent 55%);pointer-events:none}
+.badge:hover{transform:translateY(-5px) scale(1.025);box-shadow:0 14px 28px #80bde333}
+.badge small{position:absolute;bottom:9px;font:700 8px Inter;letter-spacing:1px;color:#94aabd}
+.accounts{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}
+.account{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:#ffffffb8;border:1px solid #fff;border-radius:17px}
+.account-label{font:700 9px Inter;letter-spacing:1.4px;color:#91a8ba}
+.account-user{direction:ltr;font:800 17px Inter;color:#31536e;margin-top:5px}
+.copy{border:0;background:#e7f5ff;color:#5d9bc5;border-radius:11px;width:37px;height:37px;font-size:17px;cursor:pointer}
+.footer{text-align:center;color:#9bb0c1;font:600 10px Inter;letter-spacing:2px;margin-top:23px}
+.sound-toggle{position:fixed;left:18px;bottom:18px;z-index:15;border:1px solid #d9efff;background:#ffffffdf;color:#5486a8;border-radius:30px;padding:10px 15px;font:700 11px Inter;box-shadow:0 8px 25px #76b9e52b;backdrop-filter:blur(12px);cursor:pointer}
+.sound-toggle:hover{transform:translateY(-2px)}
+.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);opacity:0;background:#203d55;color:white;padding:10px 17px;border-radius:30px;font:600 12px Inter;transition:.25s;z-index:20;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:650px){.wrap{margin:20px auto 45px}.banner{height:170px}.profile{padding:0 18px 23px}.identity{gap:12px;flex-wrap:wrap}.avatar-wrap{width:91px;height:91px;border-radius:25px;margin-top:8px}.avatar{border-radius:21px}.name{font-size:21px}.actions{width:100%;margin:2px 0 0;padding:0}.action{flex:1;text-align:center}.badge-grid{grid-template-columns:repeat(2,1fr);gap:10px}.badge{aspect-ratio:1.35;font-size:39px}.accounts{grid-template-columns:1fr}.bio{padding:16px}.topbar{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="fog" aria-hidden="true"><div class="fog-layer one"></div><div class="fog-layer two"></div><div class="fog-layer three"></div></div>
+<div class="snowbank" aria-hidden="true"></div>
+<div class="snow" id="snow"></div>
+<audio id="introAudio" preload="auto" loop>
+  <source src="https://cdn.discordapp.com/attachments/1566176068841513121/1567249814809214976/fa1b3cc15cfb8fd150a1108a023b5ab8.mp3?ex=6aeb7ea1&is=6aea2d21&hm=873a890087329ad6d3c01b7be4096251654c7db38e213cbe3f5c156dff7c8643&" type="audio/mpeg">
+</audio>
+<button id="soundToggle" class="sound-toggle" type="button" aria-label="تشغيل الصوت">♫ <span>تشغيل الصوت</span></button>
+<main class="wrap">
+  
+  <section class="card">
+    <div class="banner">
+      <img src="https://cdn.discordapp.com/attachments/1566176068841513121/1567246247511859250/041398f82700e63895a96c2e3167c97b.gif?ex=6aeb7b4f&is=6aea29cf&hm=9cf4b5281f1b6f98ca5d2e795c98a3febece1c37e0a1f9d93d1fe637c7d67458&" alt="Profile banner">
+    </div>
+    <div class="profile">
+      <div class="identity">
+        <div class="avatar-wrap"><img class="avatar" src="https://cdn.discordapp.com/attachments/1566176068841513121/1567246247977549894/c229db7ff7c5e0f3c40d51129dcebaf5.jpg?ex=6aeb7b4f&is=6aea29cf&hm=db3b4686a2bdd6e46071eb4f1f27aadcdd06cc8d5da912f8f19b334599e56439&" alt="Mohamed avatar"></div>
+        <div class="nameblock">
+          <h1 class="name">S7 <span>Snow × ICE</span> ❄️</h1>
+          <div class="handle">@K700m</div>
+          <div class="status"><i></i> ONLINE · CHILLING</div>
+        </div>
+        <div class="actions">
+          <button class="action" onclick="copyText('K700m')">COPY USER</button>
+          <a class="action" href="https://discord.com/app" target="_blank" rel="noopener">OPEN DISCORD ↗</a>
+        </div>
+      </div>
+      <div class="bio">
+        <h2 class="section-title">ABOUT ME</h2>
+        <div class="bio-line"><strong>Best friends :</strong> <span class="spoiler" onclick="this.classList.toggle('reveal')">كواري + عامريه</span></div>
+        <div class="bio-line"><strong>Age :</strong> <span class="spoiler" onclick="this.classList.toggle('reveal')">16</span></div>
+        <div class="bio-line"><strong>Name :</strong> <span class="spoiler" onclick="this.classList.toggle('reveal')">Mohamed</span></div>
+        <div class="bio-line"><strong>Account 2 :</strong> <span class="spoiler" onclick="this.classList.toggle('reveal')">k711m</span></div>
+        <div style="font:600 10px Inter;color:#9ab0c1;margin-top:9px">Tap blurred text to reveal · Discord-style spoilers</div>
+      </div>
+      <div class="badges">
+        <h2 class="section-title">PROFILE BADGES</h2>
+        <div class="badge-grid">
+          <div class="badge" title="Badge 1"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="39" fill="#f47c70"/><path d="M23 35 45 48 50 63 55 48 77 35 64 62 50 70 36 62Z" fill="#29272d"/><path d="m23 35 17 11-4 12Z M77 35 60 46l4 12Z" fill="#29272d"/></svg></div>
+          <div class="badge" title="Badge 2"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff36a"/><stop offset=".5" stop-color="#ffb51d"/><stop offset="1" stop-color="#d87908"/></linearGradient></defs><path d="m27 73 8 8 46-58-1-13-13 3Z" fill="url(#gold)" stroke="#e99a12" stroke-width="2"/><path d="m20 27 10-10 52 52-9 10Z" fill="#e94328"/><path d="m20 27 10-10 7 7-10 10Z" fill="#ff7940"/><path d="m27 73 8 8-7 4-8-8Z" fill="#f3a51a"/></svg></div>
+          <div class="badge" title="Badge 3"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="pad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffd83f"/><stop offset="1" stop-color="#f28a00"/></linearGradient></defs><path d="M19 34Q22 20 37 23l9 5h9l9-5q15-3 18 11l7 31q2 13-10 13-7 0-15-13H36Q28 78 20 78 9 78 12 65Z" fill="url(#pad)" stroke="#e98a00" stroke-width="3"/><path d="M31 39v20M21 49h20" stroke="#a95800" stroke-width="6" stroke-linecap="round"/><g fill="#a95800"><circle cx="68" cy="42" r="5"/><circle cx="78" cy="52" r="5"/><circle cx="58" cy="52" r="5"/><circle cx="68" cy="62" r="5"/></g><rect x="45" y="31" width="12" height="5" rx="2.5" fill="#fff3a4"/></svg></div>
+          <div class="badge" title="Badge 4"><svg viewBox="0 0 100 100" aria-hidden="true"><rect x="15" y="20" width="70" height="53" rx="5" fill="#6b9e6e"/><rect x="21" y="25" width="58" height="42" rx="2" fill="#b7ef91" stroke="#477a50" stroke-width="3"/><path d="M45 74h10v8H45zM35 82h30v5H35z" fill="#54875a"/><path d="M27 31h46" stroke="#e4ffd0" stroke-width="3" opacity=".65"/></svg></div>
+          <div class="badge" title="Badge 5"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M17 31h34a32 32 0 1 1 0 48H31L18 67h22a17 17 0 1 0 0-34H20Z" fill="#7189c8"/><path d="M19 42h23M21 53h14" stroke="#536ca9" stroke-width="7"/><circle cx="59" cy="55" r="13" fill="#252b3a"/></svg></div>
+          <div class="badge" title="Badge 6"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="laurel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c8f3ff"/><stop offset="1" stop-color="#8a79ec"/></linearGradient></defs><g fill="none" stroke="url(#laurel)" stroke-width="8" stroke-linecap="round"><path d="M25 72Q8 50 26 25M75 72Q92 50 74 25"/><path d="M25 61 14 57M23 48 13 42M26 35 19 26M75 61 86 57M77 48 87 42M74 35 81 26M32 79Q50 88 68 79"/></g><g fill="#c5eaff"><ellipse cx="25" cy="24" rx="7" ry="12" transform="rotate(-35 25 24)"/><ellipse cx="75" cy="24" rx="7" ry="12" transform="rotate(35 75 24)"/></g></svg></div>
+          <div class="badge" title="Badge 7"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f06bdc"/><stop offset=".5" stop-color="#7a63ff"/><stop offset="1" stop-color="#4de0c7"/></linearGradient></defs><path d="m50 12 29 12 12 26-12 27-29 12-29-12L9 50l12-26Z" fill="url(#gem)"/><path d="m50 20 24 30-24 30-24-30Z" fill="#1b1c75"/><path d="m50 29 17 21-17 21-17-21Z" fill="#fff"/><path d="m50 29 17 21H50Z" fill="#9df6e6"/><path d="m50 71-17-21h17Z" fill="#b5a5ff"/></svg></div>
+          <div class="badge" title="Badge 8"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M48 17h15v52H48z" fill="#83aebe"/><path d="M42 27 58 16v13L43 40Z" fill="#a9cbd5"/><path d="M20 66q10 17 30 15 15-1 22-12 9 12 18 2-2 20-26 20H45Q24 90 20 66Z" fill="#789eae"/><path d="M17 61q11 18 26 15-10 10-21 2-7-6-5-17Z" fill="#b4d5df"/><path d="M57 73q10 7 19-1" fill="none" stroke="#d6f3fa" stroke-width="4" stroke-linecap="round"/></svg></div>
+        </div>
+      </div>
+      <div class="accounts">
+        <div class="account"><div><div class="account-label">MAIN ACCOUNT</div><div class="account-user">K700m</div></div><button class="copy" onclick="copyText('K700m')" aria-label="Copy main account">⧉</button></div>
+        <div class="account"><div><div class="account-label">SECOND ACCOUNT</div><div class="account-user">k711m</div></div><button class="copy" onclick="copyText('k711m')" aria-label="Copy second account">⧉</button></div>
+      </div>
+    </div>
+  </section>
+  <div class="footer">MADE OF SNOW · S7 × ICE</div>
+</main>
+<div class="toast" id="toast">Copied ✓</div>
+<script>
+const snow=document.getElementById('snow');
+const audio=document.getElementById('introAudio');
+const soundToggle=document.getElementById('soundToggle');
+audio.volume=0.45;
+function updateSoundButton(){soundToggle.innerHTML=audio.paused?'♫ <span>تشغيل الصوت</span>':'♫ <span>إيقاف الصوت</span>';}
+let audioUnlocked=false;
+async function startAudio(){
+ try{
+  audio.muted=false;
+  await audio.play();
+  audioUnlocked=true;
+  updateSoundButton();
+  document.removeEventListener('pointerdown',firstTouch,true);
+  document.removeEventListener('keydown',firstTouch,true);
+ }catch(e){updateSoundButton();}
+}
+function firstTouch(){startAudio();}
+soundToggle.addEventListener('click',async()=>{if(audio.paused){await startAudio();}else{audio.pause();updateSoundButton();}});
+window.addEventListener('load',()=>{
+ startAudio();
+ // If autoplay is blocked, start the music immediately on the visitor's first tap/click/key.
+ document.addEventListener('pointerdown',firstTouch,true);
+ document.addEventListener('keydown',firstTouch,true);
+});
+for(let i=0;i<145;i++){
+ const f=document.createElement('span');f.className='flake'+(Math.random()>.78?' big':'');
+ const kind=Math.random();
+ f.textContent=kind>.76?'❅':kind>.42?'❄':'✧';
+ f.style.left=Math.random()*100+'%';
+ f.style.fontSize=(5+Math.pow(Math.random(),1.8)*19)+'px';
+ f.style.animationDuration=(8+Math.random()*19)+'s';
+ f.style.animationDelay=(-Math.random()*27)+'s';
+ f.style.setProperty('--drift',(Math.random()*230-115)+'px');
+ f.style.opacity=.22+Math.random()*.72;
+ if(Math.random()>.72) f.style.filter='blur(1.2px) drop-shadow(0 0 5px #fff)';
+ snow.appendChild(f);
+}
+function copyText(value){
+ if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(value).then(showToast).catch(()=>fallback(value));}
+ else fallback(value);
+}
+function fallback(value){const t=document.createElement('textarea');t.value=value;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();showToast();}
+function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
+</script>
+</body>
+</html>
